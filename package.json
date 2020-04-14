@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/castodius/poecli/issues"
   },
-  "homepage": "https://github.com/castodius/poecli#readme"
+  "homepage": "https://github.com/castodius/poecli#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
 }
