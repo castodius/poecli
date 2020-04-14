@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "lib": [],
+    "removeComments": false,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "es2018",
+    "outDir": "lib",
+    "baseUrl": "src",
+    "paths": {
+      "@test/*": [
+        "../test/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@helpers/*": [
+        "helpers/*"
+      ],
+      "@models/*" : [
+        "models/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules/**/*",
+    ".webpack/**/*",
+    "_warmup/**/*",
+    ".vscode/**/*"
+  ]
+}
