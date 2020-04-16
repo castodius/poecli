@@ -15,13 +15,7 @@ export interface POEditorResponseBase {
   }
 }
 
-export interface ListProjectsResponse extends POEditorResponseBase {
-  result: {
-    projects: ListProjectsResult[]
-  }
-}
-
-export interface ListProjectsResult {
+export interface CompactProject {
   id: number;
   name: string;
   public: 0 | 1;
@@ -29,17 +23,7 @@ export interface ListProjectsResult {
   created: string;
 }
 
-export interface ViewProjectRequest extends POERequestBase {
-  id: number;
-}
-
-export interface ViewProjectResponse extends POEditorResponseBase {
-  result: {
-    project: ViewProjectResult
-  }
-}
-
-export interface ViewProjectResult {
+export interface Project {
   id: number;
   name: string;
   description: string;
@@ -48,4 +32,31 @@ export interface ViewProjectResult {
   reference_language: string;
   terms: number;
   created: string;
+}
+
+export interface ListProjectsResponse extends POEditorResponseBase {
+  result: {
+    projects: CompactProject[]
+  }
+}
+
+export interface ViewProjectRequest extends POERequestBase {
+  id: number;
+}
+
+export interface ViewProjectResponse extends POEditorResponseBase {
+  result: {
+    project: Project
+  }
+}
+
+export interface AddProjectRequest {
+  name: string;
+  description?: string;
+}
+
+export interface AddProjectResponse {
+  result: {
+    project: Project;
+  }
 }

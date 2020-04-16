@@ -25,15 +25,20 @@ export class POEditor {
     }
   }
 
-  public listProjects = async (): Promise<POEditorModels.ListProjectsResult[]> => {
+  public listProjects = async (): Promise<POEditorModels.CompactProject[]> => {
     const data = await this.callAPI<POEditorModels.ListProjectsResponse>('/projects/list')
 
     return data.result.projects;
   };
 
-  public viewProject = async (params: POEditorModels.ViewProjectRequest): Promise<POEditorModels.ViewProjectResult> => {
-    console.log(params);
+  public viewProject = async (params: POEditorModels.ViewProjectRequest): Promise<POEditorModels.Project> => {
     const data = await this.callAPI<POEditorModels.ViewProjectResponse>('/projects/view', params);
+
+    return data.result.project;
+  }
+
+  public addProject = async (params: POEditorModels.AddProjectRequest): Promise<POEditorModels.Project> =>{
+    const data = await this.callAPI<POEditorModels.AddProjectResponse>('/projects/add', params);
 
     return data.result.project;
   }

@@ -2,10 +2,12 @@ import * as inquirer from 'inquirer';
 
 import { list } from './list';
 import { view } from './view';
+import { add} from './add';
 
 enum Action {
   LIST,
   VIEW,
+  ADD
 }
 
 export const entry = async (): Promise<void> => {
@@ -16,7 +18,8 @@ export const entry = async (): Promise<void> => {
       message: 'Select project action:',
       choices: [
         {name: 'List', value: Action.LIST},
-        {name: 'View', value: Action.VIEW}
+        {name: 'View', value: Action.VIEW},
+        {name: 'Add', value: Action.ADD},
       ]
     },
   ]);
@@ -28,6 +31,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.VIEW: {
       await view();
+      break;
+    }
+    case Action.ADD: {
+      await add();
       break;
     }
   }
