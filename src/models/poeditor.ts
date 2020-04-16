@@ -55,7 +55,7 @@ export interface AddProjectRequest {
   description?: string;
 }
 
-export interface AddProjectResponse {
+export interface AddProjectResponse extends POEditorResponseBase {
   result: {
     project: Project;
   }
@@ -68,7 +68,7 @@ export interface UpdateProjectRequest {
   reference_language?: string;
 }
 
-export interface UpdateProjectResponse {
+export interface UpdateProjectResponse extends POEditorResponseBase {
   result: {
     project: Project;
   }
