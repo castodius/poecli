@@ -73,3 +73,11 @@ export interface UpdateProjectResponse extends POEditorResponseBase {
     project: Project;
   }
 }
+
+export interface DeleteProjectRequest {
+  id: number;
+}
+
+export interface DeleteProjectResponse extends POEditorResponseBase {
+
+}

@@ -48,4 +48,8 @@ export class POEditor {
 
     return data.result.project;
   }
+
+  public deleteProject = async (params: POEditorModels.DeleteProjectRequest): Promise<void> =>{
+    await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params);
+  }
 }
