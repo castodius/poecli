@@ -37,8 +37,14 @@ export class POEditor {
     return data.result.project;
   }
 
-  public addProject = async (params: POEditorModels.AddProjectRequest): Promise<POEditorModels.Project> =>{
+  public addProject = async (params: POEditorModels.AddProjectRequest): Promise<POEditorModels.Project> => {
     const data = await this.callAPI<POEditorModels.AddProjectResponse>('/projects/add', params);
+
+    return data.result.project;
+  }
+
+  public updateProject = async (params: POEditorModels.UpdateProjectRequest): Promise<POEditorModels.Project> => {
+    const data = await this.callAPI<POEditorModels.UpdateProjectResponse>('/projects/update', params);
 
     return data.result.project;
   }

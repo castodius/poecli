@@ -60,3 +60,16 @@ export interface AddProjectResponse {
     project: Project;
   }
 }
+
+export interface UpdateProjectRequest {
+  id: number;
+  name?: string;
+  description?: string;
+  reference_language?: string;
+}
+
+export interface UpdateProjectResponse {
+  result: {
+    project: Project;
+  }
+}

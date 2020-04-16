@@ -2,12 +2,14 @@ import * as inquirer from 'inquirer';
 
 import { list } from './list';
 import { view } from './view';
-import { add} from './add';
+import { add } from './add';
+import { update } from './update';
 
 enum Action {
   LIST,
   VIEW,
-  ADD
+  ADD,
+  UPDATE
 }
 
 export const entry = async (): Promise<void> => {
@@ -17,9 +19,10 @@ export const entry = async (): Promise<void> => {
       type: 'list',
       message: 'Select project action:',
       choices: [
-        {name: 'List', value: Action.LIST},
-        {name: 'View', value: Action.VIEW},
-        {name: 'Add', value: Action.ADD},
+        { name: 'List', value: Action.LIST },
+        { name: 'View', value: Action.VIEW },
+        { name: 'Add', value: Action.ADD },
+        { name: 'Update', value: Action.UPDATE },
       ]
     },
   ]);
@@ -35,6 +38,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.ADD: {
       await add();
+      break;
+    }
+    case Action.UPDATE: {
+      await update();
       break;
     }
   }
