@@ -6,7 +6,7 @@ import *  as log from '@lib/log';
 export const add = async () => {
   const poe = new POEditor();
 
-  const { name, description }: AddProjectRequest = await inquirer.prompt([
+  const result: AddProjectRequest = await inquirer.prompt([
     {
       name: 'name',
       type: 'input',
@@ -20,7 +20,7 @@ export const add = async () => {
     }
   ])
 
-  const data = await poe.addProject({ name, description });
+  const data = await poe.addProject(result);
   log.info('Project successfully created');
   log.info(JSON.stringify(data));
 }
