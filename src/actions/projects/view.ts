@@ -5,7 +5,7 @@ import { selectProject } from '@helpers/poeditor';
 export const view = async (): Promise<void> => {
   const poe = new POEditor();
 
-  const id: number = await selectProject(poe)
+  const id: number = (await selectProject(poe)).id;
 
   const data = await poe.viewProject({id});
   log.info(JSON.stringify(data));

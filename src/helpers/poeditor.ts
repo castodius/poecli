@@ -1,38 +1,38 @@
 import * as inquirer from 'inquirer';
 
 import { POEditor } from "@lib/poeditor";
-import { ListProjectsResult } from '@models/poeditor';
+import { CompactProject } from '@models/poeditor';
 
 interface Choice {
   name: string;
-  value: number;
+  value: CompactProject;
 }
 
 interface Output {
-  id: number;
+  project: CompactProject;
 }
 
-export const selectProject = async (poe: POEditor): Promise<number> => {
+export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
   const projects = await poe.listProjects();
 
   const choices: Choice[] = mapProjectsToChoices(projects);
-  const { id }: Output = await inquirer.prompt([
+  const { project }: Output = await inquirer.prompt([
     {
-      name: 'id',
+      name: 'project',
       type: 'list',
       message: 'Select project:',
       choices
     }
   ])
 
-  return id;
+  return project;
 };
 
-export const mapProjectsToChoices = (projects: ListProjectsResult[]): Choice[] =>{
-  return projects.map(({name, id}: ListProjectsResult): Choice => {
+export const mapProjectsToChoices = (projects: CompactProject[]): Choice[] => {
+  return projects.map((project: CompactProject): Choice => {
     return {
-      name: `${name} - ${id}`,
-      value: id
+      name: `${project.name} - ${project.id}`,
+      value: project
     }
   });
 };
