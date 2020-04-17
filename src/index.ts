@@ -3,6 +3,7 @@ import * as commander from 'commander';
 import { getToken } from '@helpers/config';
 import { entry as tokenEntry } from '@actions/token/index';
 import { entry as projectsEntry } from '@actions/projects/index';
+import { entry as languagesEntry } from '@actions/languages/index';
 
 export const init = () => {
   //show text and stuff
@@ -17,6 +18,11 @@ const addTokenServices = () => {
     .command('projects')
     .description('Manage projects')
     .action(projectsEntry)
+
+  commander
+    .command('languages')
+    .description('Manage languages')
+    .action(languagesEntry)
 }
 
 export const main = () => {
@@ -25,7 +31,7 @@ export const main = () => {
   if (getToken()) {
     addTokenServices();
   }
-  
+
   commander
     .command('token')
     .description('Manage your POEditor token')

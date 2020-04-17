@@ -34,6 +34,11 @@ export interface Project {
   created: string;
 }
 
+export interface Language {
+  name: string;
+  code: string;
+}
+
 export interface ListProjectsResponse extends POEditorResponseBase {
   result: {
     projects: CompactProject[]
@@ -80,4 +85,10 @@ export interface DeleteProjectRequest {
 
 export interface DeleteProjectResponse extends POEditorResponseBase {
 
+}
+
+export interface AvailableLanguagesResponse extends POEditorResponseBase {
+  result: {
+    languages: Language[]
+  }
 }

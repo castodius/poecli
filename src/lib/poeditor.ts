@@ -52,4 +52,10 @@ export class POEditor {
   public deleteProject = async (params: POEditorModels.DeleteProjectRequest): Promise<void> =>{
     await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params);
   }
+
+  public getAvailableLanguages = async (): Promise<POEditorModels.Language[]> =>{
+    const data = await this.callAPI<POEditorModels.AvailableLanguagesResponse>('/languages/available');
+
+    return data.result.languages;
+  }
 }
