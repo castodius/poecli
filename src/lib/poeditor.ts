@@ -58,4 +58,10 @@ export class POEditor {
 
     return data.result.languages;
   }
+
+  public getProjectLanguages = async(params: POEditorModels.ListLanguagesRequest): Promise<POEditorModels.ProjectLanguage[]> =>{
+    const data = await this.callAPI<POEditorModels.ListLanguagesResponse>('/languages/list', params);
+
+    return data.result.languages;
+  };
 }

@@ -39,6 +39,14 @@ export interface Language {
   code: string;
 }
 
+export interface ProjectLanguage {
+  name: string;
+  code: string;
+  translations: number;
+  percentage: number;
+  updated: string;
+}
+
 export interface ListProjectsResponse extends POEditorResponseBase {
   result: {
     projects: CompactProject[]
@@ -90,5 +98,15 @@ export interface DeleteProjectResponse extends POEditorResponseBase {
 export interface AvailableLanguagesResponse extends POEditorResponseBase {
   result: {
     languages: Language[]
+  }
+}
+
+export interface ListLanguagesRequest extends POERequestBase {
+  id: number;
+}
+
+export interface ListLanguagesResponse extends POEditorResponseBase {
+  result: {
+    languages: ProjectLanguage[];
   }
 }
