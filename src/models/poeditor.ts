@@ -23,15 +23,10 @@ export interface CompactProject {
   created: string;
 }
 
-export interface Project {
-  id: number;
-  name: string;
+export interface Project extends CompactProject{
   description: string;
-  public: 0 | 1;
-  open: 0 | 1;
   reference_language: string;
   terms: number;
-  created: string;
 }
 
 export interface Language {
@@ -39,9 +34,7 @@ export interface Language {
   code: string;
 }
 
-export interface ProjectLanguage {
-  name: string;
-  code: string;
+export interface ProjectLanguage extends Language{
   translations: number;
   percentage: number;
   updated: string;
@@ -109,4 +102,13 @@ export interface ListLanguagesResponse extends POEditorResponseBase {
   result: {
     languages: ProjectLanguage[];
   }
+}
+
+export interface AddLanguageRequest extends POERequestBase {
+  id: number;
+  language: string;
+}
+
+export interface AddLanguageResponse extends POEditorResponseBase {
+
 }

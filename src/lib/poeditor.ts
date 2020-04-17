@@ -64,4 +64,8 @@ export class POEditor {
 
     return data.result.languages;
   };
+
+  public addLanguage = async(params: POEditorModels.AddLanguageRequest): Promise<void> =>{
+    await this.callAPI<POEditorModels.AddLanguageRequest>('/languages/add', params);
+  };
 }
