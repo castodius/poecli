@@ -23,7 +23,7 @@ export interface CompactProject {
   created: string;
 }
 
-export interface Project extends CompactProject{
+export interface Project extends CompactProject {
   description: string;
   reference_language: string;
   terms: number;
@@ -34,10 +34,27 @@ export interface Language {
   code: string;
 }
 
-export interface ProjectLanguage extends Language{
+export interface ProjectLanguage extends Language {
   translations: number;
   percentage: number;
   updated: string;
+}
+
+export interface Term {
+  term: string;
+  context: string;
+  plural: string;
+  created: string;
+  updated: string;
+  translation: {
+    content: string;
+    fuzzy: 0 | 1;
+    proofread: 0 | 1;
+    updated: string;
+  };
+  reference: string;
+  tags: string[];
+  comment: string;
 }
 
 export interface ListProjectsResponse extends POEditorResponseBase {
@@ -113,11 +130,22 @@ export interface AddLanguageResponse extends POEditorResponseBase {
 
 }
 
-export interface DeleteLanguageRequest extends POERequestBase{
+export interface DeleteLanguageRequest extends POERequestBase {
   id: number;
   language: string;
 }
 
 export interface DeleteLanguageResponse extends POEditorResponseBase {
 
+}
+
+export interface ListTermsRequest extends POERequestBase {
+  id: number;
+  language?: string;
+}
+
+export interface ListTermsResponse extends POEditorResponseBase {
+  result: {
+    terms: Term[];
+  }
 }

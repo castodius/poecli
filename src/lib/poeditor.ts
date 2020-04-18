@@ -72,4 +72,10 @@ export class POEditor {
   public deleteLanguage = async (params: POEditorModels.DeleteLanguageRequest): Promise<void> => {
     await this.callAPI<POEditorModels.DeleteLanguageResponse>('/languages/delete', params)
   }
+
+  public listTerms = async (params: POEditorModels.ListTermsRequest): Promise<POEditorModels.Term[]> => {
+    const data = await this.callAPI<POEditorModels.ListTermsResponse>('/terms/list', params)
+
+    return data.result.terms
+  }
 }

@@ -4,6 +4,7 @@ import { getToken } from '@helpers/config'
 import { entry as tokenEntry } from '@actions/token/index'
 import { entry as projectsEntry } from '@actions/projects/index'
 import { entry as languagesEntry } from '@actions/languages/index'
+import { entry as termsEntry } from '@actions/terms/index'
 
 export const init = () => {
   // show text and stuff
@@ -23,6 +24,11 @@ const addTokenServices = () => {
     .command('languages')
     .description('Manage languages')
     .action(languagesEntry)
+
+  commander
+    .command('terms')
+    .description('Manage terms')
+    .action(termsEntry)
 }
 
 export const main = () => {
