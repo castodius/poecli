@@ -112,3 +112,12 @@ export interface AddLanguageRequest extends POERequestBase {
 export interface AddLanguageResponse extends POEditorResponseBase {
 
 }
+
+export interface DeleteLanguageRequest extends POERequestBase{
+  id: number;
+  language: string;
+}
+
+export interface DeleteLanguageResponse extends POEditorResponseBase {
+
+}

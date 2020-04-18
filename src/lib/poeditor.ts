@@ -49,23 +49,27 @@ export class POEditor {
     return data.result.project;
   }
 
-  public deleteProject = async (params: POEditorModels.DeleteProjectRequest): Promise<void> =>{
+  public deleteProject = async (params: POEditorModels.DeleteProjectRequest): Promise<void> => {
     await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params);
   }
 
-  public getAvailableLanguages = async (): Promise<POEditorModels.Language[]> =>{
+  public getAvailableLanguages = async (): Promise<POEditorModels.Language[]> => {
     const data = await this.callAPI<POEditorModels.AvailableLanguagesResponse>('/languages/available');
 
     return data.result.languages;
   }
 
-  public getProjectLanguages = async(params: POEditorModels.ListLanguagesRequest): Promise<POEditorModels.ProjectLanguage[]> =>{
+  public getProjectLanguages = async (params: POEditorModels.ListLanguagesRequest): Promise<POEditorModels.ProjectLanguage[]> => {
     const data = await this.callAPI<POEditorModels.ListLanguagesResponse>('/languages/list', params);
 
     return data.result.languages;
   };
 
-  public addLanguage = async(params: POEditorModels.AddLanguageRequest): Promise<void> =>{
+  public addLanguage = async (params: POEditorModels.AddLanguageRequest): Promise<void> => {
     await this.callAPI<POEditorModels.AddLanguageRequest>('/languages/add', params);
   };
+
+  public deleteLanguage = async (params: POEditorModels.DeleteLanguageRequest): Promise<void> => {
+    await this.callAPI<POEditorModels.DeleteLanguageResponse>('/languages/delete', params);
+  }
 }

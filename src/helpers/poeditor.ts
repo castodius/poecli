@@ -49,7 +49,7 @@ export interface LanguageOutput {
 
 export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language> => {
   let languages = await poe.getAvailableLanguages();
-  if(exclude){
+  if (exclude) {
     languages = filterLanguages(languages, exclude)
   }
 
@@ -66,22 +66,45 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   return language;
 }
 
-export const filterLanguages = (languages: Language[], filters: ProjectLanguage[]): Language[]=>{
-  const filterMap: BooleanMap = filters.reduce((acc: BooleanMap, language: ProjectLanguage )=>{
+export const filterLanguages = (languages: Language[], filters: ProjectLanguage[]): Language[] => {
+  const filterMap: BooleanMap = filters.reduce((acc: BooleanMap, language: ProjectLanguage) => {
     acc[language.code] = true;
     return acc;
   }, {})
 
-  return languages.filter((language: Language)=>{
+  return languages.filter((language: Language) => {
     return !filterMap[language.code];
   });
 }
 
 export const mapLanguagesToChoices = (languages: Language[]): LanguageChoice[] => {
-  return languages.map((language: Language): LanguageChoice =>{
+  return languages.map((language: Language): LanguageChoice => {
     return {
       name: `${language.name} - ${language.code}`,
       value: language
     }
   });
 }
+
+export interface ProjectLanguageOutput {
+  language: ProjectLanguage;
+}
+
+export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<ProjectLanguage | undefined> => {
+  const languages = await poe.getProjectLanguages({id});
+  if(!languages.length){
+    return;
+  }
+
+  const choices: LanguageChoice[] = mapLanguagesToChoices(languages);
+  const { language }: ProjectLanguageOutput = await inquirer.prompt([
+    {
+      name: 'language',
+      type: 'list',
+      message: 'Select language:',
+      choices
+    }
+  ])
+
+  return language;
+};
