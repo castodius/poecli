@@ -1,8 +1,8 @@
-import * as inquirer from 'inquirer';
+import * as inquirer from 'inquirer'
 
-import { getToken } from '@helpers/config';
-import { get } from './get';
-import { set } from './set';
+import { getToken } from '@helpers/config'
+import { get } from './get'
+import { set } from './set'
 
 enum Action {
   GET,
@@ -16,26 +16,26 @@ export const entry = async (): Promise<void> => {
       type: 'list',
       message: 'Select token action:',
       choices: getChoices()
-    },
-  ]);
+    }
+  ])
 
   switch (action) {
     case Action.SET: {
-      await set();
-      break;
+      await set()
+      break
     }
     case Action.GET: {
-      await get();
-      break;
+      await get()
+      break
     }
   }
-};
+}
 
 export const getChoices = () => {
-  const choices = [];
+  const choices = []
   if (getToken()) {
     choices.push({ name: 'Get', value: Action.GET })
   }
-  choices.push({ name: 'Set', value: Action.SET });
-  return choices;
+  choices.push({ name: 'Set', value: Action.SET })
+  return choices
 }

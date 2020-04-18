@@ -1,8 +1,8 @@
-import * as inquirer from 'inquirer';
+import * as inquirer from 'inquirer'
 
-import { POEditor } from "@lib/poeditor";
-import { CompactProject, Language, ProjectLanguage } from '@models/poeditor';
-import { BooleanMap } from '@models/common';
+import { POEditor } from '@lib/poeditor'
+import { CompactProject, Language, ProjectLanguage } from '@models/poeditor'
+import { BooleanMap } from '@models/common'
 
 interface ProjectChoice {
   name: string;
@@ -14,9 +14,9 @@ interface ProjectOutput {
 }
 
 export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
-  const projects = await poe.listProjects();
+  const projects = await poe.listProjects()
 
-  const choices: ProjectChoice[] = mapProjectsToChoices(projects);
+  const choices: ProjectChoice[] = mapProjectsToChoices(projects)
   const { project }: ProjectOutput = await inquirer.prompt([
     {
       name: 'project',
@@ -26,8 +26,8 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
     }
   ])
 
-  return project;
-};
+  return project
+}
 
 export const mapProjectsToChoices = (projects: CompactProject[]): ProjectChoice[] => {
   return projects.map((project: CompactProject): ProjectChoice => {
@@ -35,8 +35,8 @@ export const mapProjectsToChoices = (projects: CompactProject[]): ProjectChoice[
       name: `${project.name} - ${project.id}`,
       value: project
     }
-  });
-};
+  })
+}
 
 export interface LanguageChoice {
   name: string;
@@ -48,12 +48,12 @@ export interface LanguageOutput {
 }
 
 export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language> => {
-  let languages = await poe.getAvailableLanguages();
+  let languages = await poe.getAvailableLanguages()
   if (exclude) {
     languages = filterLanguages(languages, exclude)
   }
 
-  const choices: LanguageChoice[] = mapLanguagesToChoices(languages);
+  const choices: LanguageChoice[] = mapLanguagesToChoices(languages)
   const { language }: LanguageOutput = await inquirer.prompt([
     {
       name: 'language',
@@ -63,18 +63,18 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
     }
   ])
 
-  return language;
+  return language
 }
 
 export const filterLanguages = (languages: Language[], filters: ProjectLanguage[]): Language[] => {
   const filterMap: BooleanMap = filters.reduce((acc: BooleanMap, language: ProjectLanguage) => {
-    acc[language.code] = true;
-    return acc;
+    acc[language.code] = true
+    return acc
   }, {})
 
   return languages.filter((language: Language) => {
-    return !filterMap[language.code];
-  });
+    return !filterMap[language.code]
+  })
 }
 
 export const mapLanguagesToChoices = (languages: Language[]): LanguageChoice[] => {
@@ -83,7 +83,7 @@ export const mapLanguagesToChoices = (languages: Language[]): LanguageChoice[] =
       name: `${language.name} - ${language.code}`,
       value: language
     }
-  });
+  })
 }
 
 export interface ProjectLanguageOutput {
@@ -91,12 +91,12 @@ export interface ProjectLanguageOutput {
 }
 
 export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<ProjectLanguage | undefined> => {
-  const languages = await poe.getProjectLanguages({id});
-  if(!languages.length){
-    return;
+  const languages = await poe.getProjectLanguages({ id })
+  if (!languages.length) {
+    return
   }
 
-  const choices: LanguageChoice[] = mapLanguagesToChoices(languages);
+  const choices: LanguageChoice[] = mapLanguagesToChoices(languages)
   const { language }: ProjectLanguageOutput = await inquirer.prompt([
     {
       name: 'language',
@@ -106,5 +106,5 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
     }
   ])
 
-  return language;
-};
+  return language
+}

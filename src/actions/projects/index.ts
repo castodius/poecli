@@ -1,10 +1,10 @@
-import * as inquirer from 'inquirer';
+import * as inquirer from 'inquirer'
 
-import { list } from './list';
-import { view } from './view';
-import { add } from './add';
-import { update } from './update';
-import { deleteProject } from './delete';
+import { list } from './list'
+import { view } from './view'
+import { add } from './add'
+import { update } from './update'
+import { deleteProject } from './delete'
 
 enum Action {
   LIST,
@@ -25,31 +25,31 @@ export const entry = async (): Promise<void> => {
         { name: 'View', value: Action.VIEW },
         { name: 'Add', value: Action.ADD },
         { name: 'Update', value: Action.UPDATE },
-        { name: 'Delete', value: Action.DELETE },
+        { name: 'Delete', value: Action.DELETE }
       ]
-    },
-  ]);
+    }
+  ])
 
   switch (action) {
     case Action.LIST: {
-      await list();
-      break;
+      await list()
+      break
     }
     case Action.VIEW: {
-      await view();
-      break;
+      await view()
+      break
     }
     case Action.ADD: {
-      await add();
-      break;
+      await add()
+      break
     }
     case Action.UPDATE: {
-      await update();
-      break;
+      await update()
+      break
     }
     case Action.DELETE: {
-      await deleteProject();
-      break;
+      await deleteProject()
+      break
     }
   }
-};
+}

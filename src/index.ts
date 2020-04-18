@@ -1,17 +1,17 @@
-import * as commander from 'commander';
+import * as commander from 'commander'
 
-import { getToken } from '@helpers/config';
-import { entry as tokenEntry } from '@actions/token/index';
-import { entry as projectsEntry } from '@actions/projects/index';
-import { entry as languagesEntry } from '@actions/languages/index';
+import { getToken } from '@helpers/config'
+import { entry as tokenEntry } from '@actions/token/index'
+import { entry as projectsEntry } from '@actions/projects/index'
+import { entry as languagesEntry } from '@actions/languages/index'
 
 export const init = () => {
-  //show text and stuff
+  // show text and stuff
 
   commander.on('command:*', () => {
-    console.log(`Invalid command: ${commander.args.join(' ')}\nSee --help for a list of available commands.`);
-  });
-};
+    console.log(`Invalid command: ${commander.args.join(' ')}\nSee --help for a list of available commands.`)
+  })
+}
 
 const addTokenServices = () => {
   commander
@@ -26,10 +26,10 @@ const addTokenServices = () => {
 }
 
 export const main = () => {
-  init();
+  init()
 
   if (getToken()) {
-    addTokenServices();
+    addTokenServices()
   }
 
   commander
@@ -37,10 +37,9 @@ export const main = () => {
     .description('Manage your POEditor token')
     .action(tokenEntry)
 
-
   if (!commander.parse(process.argv).args.length) {
-    commander.help();
+    commander.help()
   }
-};
+}
 
-main();
+main()

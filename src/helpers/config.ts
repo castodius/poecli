@@ -1,12 +1,12 @@
-import { getValueAsString, write } from '@helpers/storage';
+import { getValueAsString, write } from '@helpers/storage'
 
-//models
-import { StorageNames } from '@models/storage';
+// models
+import { StorageNames } from '@models/storage'
 
 export const getToken = (): string => {
-  return getValueAsString(StorageNames.TOKEN);
-};
+  return getValueAsString(StorageNames.TOKEN)
+}
 
 export const setToken = (token: string): void => {
-  write(StorageNames.TOKEN, token);
-};
+  write(StorageNames.TOKEN, token)
+}
