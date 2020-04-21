@@ -53,6 +53,12 @@ export class POEditor {
     await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params)
   }
 
+  public exportProject = async (params: POEditorModels.ExportProjectRequest): Promise<string> => {
+    const data = await this.callAPI<POEditorModels.ExportProjectResponse>('/projects/export', params)
+
+    return data.result.url
+  }
+
   public getAvailableLanguages = async (): Promise<POEditorModels.Language[]> => {
     const data = await this.callAPI<POEditorModels.AvailableLanguagesResponse>('/languages/available')
 

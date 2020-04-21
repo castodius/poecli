@@ -3,6 +3,39 @@ export enum Status {
   FAIL = 'fail'
 }
 
+export enum FileType {
+  PO = 'po',
+  POT = 'pot',
+  MO = 'mo',
+  XLS = 'xls',
+  XLSX = 'xlsx',
+  CSV = 'csv',
+  INI = 'ini',
+  RES = 'resw',
+  RESX = 'resx',
+  ANDROID_STRINGS = 'android_strings',
+  APPLE_STRING = 'apple_strings',
+  XLIFF = 'xliff',
+  PROPERTIES = 'properties',
+  KEY_VALUE_JSON = 'key_value_json',
+  JSON = 'json',
+  YML = 'yml',
+  XLF = 'xlf',
+  XMB = 'xmb',
+  XTB = 'xtb'
+}
+
+export enum ExportFilter {
+  TRANSLATED = 'translated',
+  UNTRANSLATED = 'untranslated',
+  FUZZY = 'fuzzy',
+  NOT_FUZZY = 'not_fuzzy',
+  AUTOMATIC = 'automatic',
+  NOT_AUTOMATIC = 'not_automatic',
+  PROOFREAD = 'proofread',
+  NOT_PROOFREAD = 'not_proofread'
+}
+
 export interface POERequestBase {
 
 }
@@ -103,6 +136,21 @@ export interface DeleteProjectRequest {
 
 export interface DeleteProjectResponse extends POEditorResponseBase {
 
+}
+
+export interface ExportProjectRequest {
+  id: number;
+  language: string;
+  type: FileType;
+  filters?: ExportFilter[]
+  tags?: string[];
+  order?: string;
+}
+
+export interface ExportProjectResponse {
+  result: {
+    url: string;
+  }
 }
 
 export interface AvailableLanguagesResponse extends POEditorResponseBase {
