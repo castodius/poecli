@@ -5,13 +5,15 @@ import { view } from './view'
 import { add } from './add'
 import { update } from './update'
 import { deleteProject } from './delete'
+import { exportProject } from './export'
 
 enum Action {
   LIST,
   VIEW,
   ADD,
   UPDATE,
-  DELETE
+  DELETE,
+  EXPORT
 }
 
 export const entry = async (): Promise<void> => {
@@ -25,7 +27,8 @@ export const entry = async (): Promise<void> => {
         { name: 'View', value: Action.VIEW },
         { name: 'Add', value: Action.ADD },
         { name: 'Update', value: Action.UPDATE },
-        { name: 'Delete', value: Action.DELETE }
+        { name: 'Delete', value: Action.DELETE },
+        { name: 'Export', value: Action.EXPORT }
       ]
     }
   ])
@@ -49,6 +52,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.DELETE: {
       await deleteProject()
+      break
+    }
+    case Action.EXPORT: {
+      await exportProject()
       break
     }
   }
