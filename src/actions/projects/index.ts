@@ -5,6 +5,7 @@ import { view } from './view'
 import { add } from './add'
 import { update } from './update'
 import { deleteProject } from './delete'
+import { upload } from './upload'
 import { sync } from './sync'
 import { exportProject } from './export'
 
@@ -14,6 +15,7 @@ enum Action {
   ADD,
   UPDATE,
   DELETE,
+  UPLOAD,
   SYNC,
   EXPORT
 }
@@ -30,6 +32,7 @@ export const entry = async (): Promise<void> => {
         { name: 'Add', value: Action.ADD },
         { name: 'Update', value: Action.UPDATE },
         { name: 'Delete', value: Action.DELETE },
+        { name: 'Upload', value: Action.UPLOAD },
         { name: 'Sync', value: Action.SYNC },
         { name: 'Export', value: Action.EXPORT }
       ]
@@ -55,6 +58,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.DELETE: {
       await deleteProject()
+      break
+    }
+    case Action.UPLOAD: {
+      await upload()
       break
     }
     case Action.SYNC: {

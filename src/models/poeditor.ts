@@ -36,6 +36,12 @@ export enum ExportFilter {
   NOT_PROOFREAD = 'not_proofread'
 }
 
+export enum UpdateType {
+  TERMS = 'terms',
+  TERMS_TRANSLATIONS = 'terms_translations',
+  TRANSLATIONS = 'translations'
+}
+
 export interface POERequestBase {
 
 }
@@ -93,11 +99,16 @@ export interface Term extends TermBase {
   };
 }
 
-export interface TermsOutput {
+export interface UpdateStatisticsObject {
   parsed?: number,
   added?: number,
   updated?: number,
   deleted?: number
+}
+
+export interface UpdateStatistics {
+  terms?: UpdateStatisticsObject;
+  translations?: UpdateStatisticsObject;
 }
 
 export interface ListProjectsResponse extends POEditorResponseBase {
@@ -148,15 +159,29 @@ export interface DeleteProjectResponse extends POEditorResponseBase {
 
 }
 
+export interface UploadProjectRequest extends POERequestBase {
+  id: number;
+  updating: UpdateType;
+  file: string;
+  language?: string;
+  overwrite?: 0 | 1;
+  sync_terms?: 0 | 1;
+  tags?: string[];
+  read_from_source?: 0 | 1;
+  fuzzy_trigger?: 0 | 1;
+}
+
+export interface UploadProjectResponse extends POEditorResponseBase {
+  result: UpdateStatistics
+}
+
 export interface SyncProjectRequest extends POERequestBase {
   id: number;
   data: string;
 }
 
 export interface SyncProjectResponse extends POEditorResponseBase {
-  result: {
-    terms: TermsOutput
-  }
+  result: UpdateStatistics
 }
 
 export interface ExportProjectRequest {

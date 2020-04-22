@@ -1,10 +1,13 @@
 import axios from 'axios'
+import FormData from 'form-data'
+
 import { stringify } from 'querystring'
 
 import { variables } from '@helpers/env'
 
 import * as POEditorModels from '@models/poeditor'
 import { getToken } from '@helpers/config'
+import { createReadStream } from 'fs'
 
 export class POEditor {
   private token: string;
@@ -53,10 +56,35 @@ export class POEditor {
     await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params)
   }
 
-  public syncProject = async (params: POEditorModels.SyncProjectRequest): Promise<POEditorModels.TermsOutput> => {
+  public uploadProject = async (params: POEditorModels.UploadProjectRequest): Promise<POEditorModels.UpdateStatistics> => {
+    const form = new FormData()
+    form.append('api_token', this.token)
+
+    // The types below are lies. Had to find a way to get this to work.
+    Object.entries(params).forEach((stuff: [string, string]) => {
+      const [key, value]: [string, string] = stuff
+      if (!value) {
+        return
+      }
+      if (key === 'file') {
+        form.append(key, createReadStream(value))
+      }
+      form.append(key, value)
+    })
+
+    const { data }: { data: POEditorModels.UploadProjectResponse } = await axios.post(variables.POEditorBaseUrl + '/projects/upload'
+      , form
+      , {
+        headers: form.getHeaders()
+      })
+    this.verifyOutput(data)
+    return data.result
+  }
+
+  public syncProject = async (params: POEditorModels.SyncProjectRequest): Promise<POEditorModels.UpdateStatistics> => {
     const data = await this.callAPI<POEditorModels.SyncProjectResponse>('/projects/sync', params)
 
-    return data.result.terms
+    return data.result
   }
 
   public exportProject = async (params: POEditorModels.ExportProjectRequest): Promise<string> => {
