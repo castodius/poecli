@@ -73,10 +73,16 @@ export interface ProjectLanguage extends Language {
   updated: string;
 }
 
-export interface Term {
+export interface TermBase {
   term: string;
-  context: string;
-  plural: string;
+  context?: string;
+  plural?: string;
+  reference?: string;
+  tags?: string[];
+  comment?: string;
+}
+
+export interface Term extends TermBase {
   created: string;
   updated: string;
   translation: {
@@ -85,9 +91,13 @@ export interface Term {
     proofread: 0 | 1;
     updated: string;
   };
-  reference: string;
-  tags: string[];
-  comment: string;
+}
+
+export interface TermsOutput {
+  parsed?: number,
+  added?: number,
+  updated?: number,
+  deleted?: number
 }
 
 export interface ListProjectsResponse extends POEditorResponseBase {
@@ -136,6 +146,17 @@ export interface DeleteProjectRequest {
 
 export interface DeleteProjectResponse extends POEditorResponseBase {
 
+}
+
+export interface SyncProjectRequest extends POERequestBase {
+  id: number;
+  data: string;
+}
+
+export interface SyncProjectResponse extends POEditorResponseBase {
+  result: {
+    terms: TermsOutput
+  }
 }
 
 export interface ExportProjectRequest {

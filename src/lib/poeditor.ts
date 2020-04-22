@@ -53,6 +53,12 @@ export class POEditor {
     await this.callAPI<POEditorModels.DeleteProjectResponse>('/projects/delete', params)
   }
 
+  public syncProject = async (params: POEditorModels.SyncProjectRequest): Promise<POEditorModels.TermsOutput> => {
+    const data = await this.callAPI<POEditorModels.SyncProjectResponse>('/projects/sync', params)
+
+    return data.result.terms
+  }
+
   public exportProject = async (params: POEditorModels.ExportProjectRequest): Promise<string> => {
     const data = await this.callAPI<POEditorModels.ExportProjectResponse>('/projects/export', params)
 
