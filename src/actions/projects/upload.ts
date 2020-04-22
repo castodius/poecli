@@ -6,6 +6,8 @@ import inquirer from 'inquirer'
 import { FileType, UpdateType, POBoolean } from '@models/poeditor'
 import { readdirSync } from 'fs'
 
+type POBooleanUndefined = POBoolean | undefined
+
 export const upload = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -42,8 +44,9 @@ export const upload = async (): Promise<void> => {
   ])
 
   const language: string | undefined = await getLanguage(updating, project.id, poe)
-  const overwrite: POBoolean | undefined = await getOverwrite(updating)
-  const syncTerms: POBoolean | undefined = await getSyncTerms(updating)
+  const overwrite: POBooleanUndefined = await getOverwrite(updating)
+  const syncTerms: POBooleanUndefined = await getSyncTerms(updating)
+  const readFromSource: POBooleanUndefined = await getReadFromSource(file)
 
   const data = await poe.uploadProject({
     id: project.id,
@@ -51,7 +54,8 @@ export const upload = async (): Promise<void> => {
     file: `${process.cwd()}/${file}`,
     language,
     overwrite,
-    sync_terms: syncTerms
+    sync_terms: syncTerms,
+    read_from_source: readFromSource
   })
   log.info(JSON.stringify(data))
 }
@@ -64,7 +68,7 @@ export const getLanguage = async (updating: UpdateType, id: number, poe: POEdito
   return (await selectProjectLanguage(poe, id))?.code
 }
 
-export const getOverwrite = async (updating: UpdateType): Promise<POBoolean | undefined> => {
+export const getOverwrite = async (updating: UpdateType): Promise<POBooleanUndefined> => {
   if (updating === UpdateType.TERMS) {
     return
   }
@@ -80,7 +84,7 @@ export const getOverwrite = async (updating: UpdateType): Promise<POBoolean | un
   return overwrite ? 1 : 0
 }
 
-export const getSyncTerms = async (updating: UpdateType): Promise<POBoolean | undefined> => {
+export const getSyncTerms = async (updating: UpdateType): Promise<POBooleanUndefined> => {
   if (updating === UpdateType.TRANSLATIONS) {
     return
   }
@@ -94,4 +98,20 @@ export const getSyncTerms = async (updating: UpdateType): Promise<POBoolean | un
   ])
 
   return syncTerms ? 1 : 0
+}
+
+export const getReadFromSource = async (file: string): Promise<POBooleanUndefined> => {
+  if (file.endsWith(FileType.XLIFF)) {
+    return
+  }
+
+  const { readFromSource }: { readFromSource: boolean } = await inquirer.prompt([
+    {
+      name: 'overwrite',
+      type: 'confirm',
+      message: 'Do you want to import translations from the source tag?'
+    }
+  ])
+
+  return readFromSource ? 1 : 0
 }
