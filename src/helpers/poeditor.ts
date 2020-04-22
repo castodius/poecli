@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer'
 
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
 
 interface ProjectChoice {
@@ -107,4 +107,56 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
   ])
 
   return language
+}
+
+export const inputTerms = async (poe: POEditor): Promise<TermBase[]> => {
+  /**
+ * "term": "one project found",
+        "context": "",
+        "reference": "\/projects",
+        "plural": "%d projects found",
+        "comment": "Make sure you translate the plural forms",
+        "tags": [
+            "first_tag",
+            "second_tag"
+        ]
+ */
+  return []
+}
+
+interface TagOutput {
+  newTag: string;
+}
+export const inputTags = async (): Promise<string[]> => {
+  const tags: string[] = []
+  let tag: string = 'something'
+  while (tag) {
+    const { newTag }: TagOutput = await inquirer.prompt([
+      {
+        name: 'newTag',
+        type: 'input',
+        message: 'Input tags. Enter an empty string to continue with the next step',
+        validate: validateTag
+      }
+    ])
+
+    if (newTag) {
+      tags.push(newTag)
+    }
+    tag = newTag
+  }
+
+  return tags
+}
+
+export const validateTag = (value: string) => {
+  if (!value) {
+    return true
+  }
+
+  if (!value.match(/^[^,\s]+$/)) {
+    return 'Input should be a string without whitespace. For example "abc" or "my-tag"'
+  }
+
+  return true
 }

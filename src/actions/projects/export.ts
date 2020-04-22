@@ -2,17 +2,10 @@ import * as inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
 import { FileType, ExportFilter } from '@models/poeditor'
 
 inquirer.registerPrompt('checkbox-plus', checkbox)
-
-interface PromptResult {
-  type: FileType;
-  filters: ExportFilter[];
-  tags?: string;
-  order: boolean
-}
 
 const filters = Object.values(ExportFilter)
 
@@ -27,7 +20,7 @@ export const exportProject = async (): Promise<void> => {
     return
   }
 
-  const { type, filters, tags, order }: PromptResult = await inquirer.prompt([
+  const { type, filters }: {type: FileType, filters: ExportFilter[]} = await inquirer.prompt([
     {
       name: 'type',
       type: 'list',
@@ -40,13 +33,12 @@ export const exportProject = async (): Promise<void> => {
       message: 'Select filters (optional)',
       searchable: true,
       source: filterSource
-    },
-    {
-      name: 'tags',
-      type: 'input',
-      message: 'Input tags to filter on (optional)',
-      validate: validateTags
-    },
+    }
+  ])
+
+  const tags: string[] = await inputTags()
+
+  const { order }: {order: boolean} = await inquirer.prompt([
     {
       name: 'order',
       type: 'confirm',
@@ -59,7 +51,7 @@ export const exportProject = async (): Promise<void> => {
     language: language.code,
     type,
     filters,
-    tags: tags ? tags.split(',') : [],
+    tags,
     order: order ? 'terms' : ''
   })
   log.info('File export url successfully generated. Download your file from the url within the next 10 minutes')
