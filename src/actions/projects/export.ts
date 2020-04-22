@@ -10,7 +10,8 @@ inquirer.registerPrompt('checkbox-plus', checkbox)
 interface PromptResult {
   type: FileType;
   filters: ExportFilter[];
-  tags?: string
+  tags?: string;
+  order: boolean
 }
 
 const filters = Object.values(ExportFilter)
@@ -26,7 +27,7 @@ export const exportProject = async (): Promise<void> => {
     return
   }
 
-  const { type, filters, tags }: PromptResult = await inquirer.prompt([
+  const { type, filters, tags, order }: PromptResult = await inquirer.prompt([
     {
       name: 'type',
       type: 'list',
@@ -45,6 +46,11 @@ export const exportProject = async (): Promise<void> => {
       type: 'input',
       message: 'Input tags to filter on (optional)',
       validate: validateTags
+    },
+    {
+      name: 'order',
+      type: 'confirm',
+      message: 'Order alphabetically by terms?'
     }
   ])
 
@@ -53,7 +59,8 @@ export const exportProject = async (): Promise<void> => {
     language: language.code,
     type,
     filters,
-    tags: tags ? tags.split(',') : []
+    tags: tags ? tags.split(',') : [],
+    order: order ? 'terms' : ''
   })
   log.info('File export url successfully generated. Download your file from the url within the next 10 minutes')
   log.info(url)
