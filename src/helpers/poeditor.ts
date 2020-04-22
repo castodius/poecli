@@ -109,33 +109,80 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
   return language
 }
 
-export const inputTerms = async (poe: POEditor): Promise<TermBase[]> => {
-  /**
- * "term": "one project found",
-        "context": "",
-        "reference": "\/projects",
-        "plural": "%d projects found",
-        "comment": "Make sure you translate the plural forms",
-        "tags": [
-            "first_tag",
-            "second_tag"
-        ]
- */
-  return []
+export const inputTerms = async (): Promise<TermBase[]> => {
+  const terms: TermBase[] = []
+
+  let anotherTerm = true
+
+  while (anotherTerm) {
+    const partialTerm: TermBase = await inquirer.prompt([
+      {
+        name: 'term',
+        type: 'input',
+        message: 'Input term',
+        validate: validateTerm
+      },
+      {
+        name: 'comment',
+        type: 'input',
+        message: 'Input comment (optional)'
+      },
+      {
+        name: 'context',
+        type: 'input',
+        message: 'Input context (optional)'
+      },
+      {
+        name: 'reference',
+        type: 'input',
+        message: 'Input reference (optional)'
+      },
+      {
+        name: 'plural',
+        type: 'input',
+        message: 'Input plural (optional)'
+      }
+    ])
+
+    const tags = await inputTags()
+
+    const term: TermBase = {
+      ...partialTerm,
+      tags
+    }
+    terms.push(term)
+
+    const { confirm } = await inquirer.prompt([
+      {
+        name: 'confirm',
+        type: 'confirm',
+        message: 'Do you want to add another term?'
+      }
+    ])
+
+    anotherTerm = confirm
+  }
+
+  return terms
 }
 
-interface TagOutput {
-  newTag: string;
+export const validateTerm = (value: string) => {
+  if (!value && !value.trim()) {
+    return 'Please input a term such as "PROJECT_NAME"'
+  }
+
+  return true
 }
+
 export const inputTags = async (): Promise<string[]> => {
   const tags: string[] = []
   let tag: string = 'something'
   while (tag) {
-    const { newTag }: TagOutput = await inquirer.prompt([
+    const { newTag }: { newTag: string } = await inquirer.prompt([
       {
         name: 'newTag',
         type: 'input',
-        message: 'Input tags. Enter an empty string to continue with the next step',
+        message: 'Input tag(s). Enter an empty string to continue with the next step',
         validate: validateTag
       }
     ])
