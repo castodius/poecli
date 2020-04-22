@@ -3,6 +3,8 @@ export enum Status {
   FAIL = 'fail'
 }
 
+export type POBoolean = 0 | 1;
+
 export enum FileType {
   PO = 'po',
   POT = 'pot',
@@ -57,8 +59,8 @@ export interface POEditorResponseBase {
 export interface CompactProject {
   id: number;
   name: string;
-  public: 0 | 1;
-  open: 0 | 1;
+  public: POBoolean;
+  open: POBoolean;
   created: string;
 }
 
@@ -93,8 +95,8 @@ export interface Term extends TermBase {
   updated: string;
   translation: {
     content: string;
-    fuzzy: 0 | 1;
-    proofread: 0 | 1;
+    fuzzy: POBoolean;
+    proofread: POBoolean;
     updated: string;
   };
 }
@@ -164,11 +166,11 @@ export interface UploadProjectRequest extends POERequestBase {
   updating: UpdateType;
   file: string;
   language?: string;
-  overwrite?: 0 | 1;
-  sync_terms?: 0 | 1;
+  overwrite?: POBoolean;
+  sync_terms?: POBoolean;
   tags?: string[];
-  read_from_source?: 0 | 1;
-  fuzzy_trigger?: 0 | 1;
+  read_from_source?: POBoolean;
+  fuzzy_trigger?: POBoolean;
 }
 
 export interface UploadProjectResponse extends POEditorResponseBase {
