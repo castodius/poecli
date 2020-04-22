@@ -10,7 +10,6 @@ export const sync = async () => {
 
   const terms: TermBase[] = await inputTerms()
 
-  console.log(terms)
   const data = await poe.syncProject({ id: project.id, data: JSON.stringify(terms) })
   log.info('Project successfully synced')
   log.info(JSON.stringify(data))
