@@ -61,6 +61,8 @@ export const upload = async (): Promise<void> => {
     fuzzy_trigger: fuzzyTrigger,
     tags
   })
+
+  log.info('Project file successfully uploaded and parsed')
   log.info(JSON.stringify(data))
 }
 
