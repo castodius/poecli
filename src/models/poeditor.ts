@@ -44,6 +44,15 @@ export enum UpdateType {
   TRANSLATIONS = 'translations'
 }
 
+export enum UpdateTag {
+  ALL = 'all',
+  NEW = 'new',
+  OBSOLETE = 'obsolete',
+  OVERWRITTEN_TRANSLATIONS = 'overwritten_translations'
+}
+
+export type UpdateTagObject = Record<UpdateTag, string[]>
+
 export interface POERequestBase {
 
 }
@@ -168,7 +177,7 @@ export interface UploadProjectRequest extends POERequestBase {
   language?: string;
   overwrite?: POBoolean;
   sync_terms?: POBoolean;
-  tags?: string[];
+  tags?: string[] | UpdateTagObject;
   read_from_source?: POBoolean;
   fuzzy_trigger?: POBoolean;
 }

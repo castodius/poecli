@@ -63,13 +63,16 @@ export class POEditor {
     // The types below are lies. Had to find a way to get this to work.
     Object.entries(params).forEach((stuff: [string, string]) => {
       const [key, value]: [string, string] = stuff
-      if (!value) {
+      if (value === undefined) {
         return
       }
       if (key === 'file') {
         form.append(key, createReadStream(value))
+      } else if (key === 'tags') {
+        form.append(key, JSON.stringify(value))
+      } else {
+        form.append(key, value)
       }
-      form.append(key, value)
     })
 
     const { data }: { data: POEditorModels.UploadProjectResponse } = await axios.post(variables.POEditorBaseUrl + '/projects/upload'

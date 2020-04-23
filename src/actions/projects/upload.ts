@@ -1,9 +1,9 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
 import inquirer from 'inquirer'
-import { FileType, UpdateType, POBoolean } from '@models/poeditor'
+import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject } from '@models/poeditor'
 import { readdirSync } from 'fs'
 
 type POBooleanUndefined = POBoolean | undefined
@@ -48,6 +48,7 @@ export const upload = async (): Promise<void> => {
   const syncTerms: POBooleanUndefined = await getSyncTerms(updating)
   const readFromSource: POBooleanUndefined = await getReadFromSource(file)
   const fuzzyTrigger: POBoolean = await getFuzzyTrigger()
+  const tags: UpdateTagObject | undefined = await getTags(updating)
 
   const data = await poe.uploadProject({
     id: project.id,
@@ -57,7 +58,8 @@ export const upload = async (): Promise<void> => {
     overwrite,
     sync_terms: syncTerms,
     read_from_source: readFromSource,
-    fuzzy_trigger: fuzzyTrigger
+    fuzzy_trigger: fuzzyTrigger,
+    tags
   })
   log.info(JSON.stringify(data))
 }
@@ -103,7 +105,7 @@ export const getSyncTerms = async (updating: UpdateType): Promise<POBooleanUndef
 }
 
 export const getReadFromSource = async (file: string): Promise<POBooleanUndefined> => {
-  if (file.endsWith(FileType.XLIFF)) {
+  if (!file.endsWith(FileType.XLIFF)) {
     return
   }
 
@@ -128,4 +130,54 @@ export const getFuzzyTrigger = async (): Promise<POBoolean> => {
   ])
 
   return fuzzyTrigger ? 1 : 0
+}
+
+export const getTags = async (updating: UpdateType): Promise<UpdateTagObject | undefined> => {
+  if (updating === UpdateType.TRANSLATIONS) {
+    return
+  }
+
+  const choices = [{
+    name: 'All',
+    value: UpdateTag.ALL
+  }, {
+    name: 'New - terms which are in the file but not in the project',
+    value: UpdateTag.NEW
+  }, {
+    name: 'Obsolete - terms which are in the project but not in the file',
+    value: UpdateTag.OBSOLETE
+  }, {
+    name: 'Overwritten translations',
+    value: UpdateTag.OVERWRITTEN_TRANSLATIONS
+  }]
+
+  const response: UpdateTagObject = {
+    [UpdateTag.ALL]: [],
+    [UpdateTag.NEW]: [],
+    [UpdateTag.OBSOLETE]: [],
+    [UpdateTag.OVERWRITTEN_TRANSLATIONS]: []
+  }
+
+  log.info('You are about to add tags to your terms and translations. This action can be done multiple times')
+
+  while (true) {
+    const { updateTags }: {updateTags: UpdateTag[]} = await inquirer.prompt([{
+      name: 'updateTags',
+      type: 'checkbox',
+      message: 'Select term and translations states to apply tags to',
+      choices
+    }])
+
+    if (!updateTags.length) {
+      break
+    }
+
+    const tags = await inputTags()
+
+    updateTags.forEach((state: UpdateTag) => {
+      response[state].push(...tags)
+    })
+  }
+
+  return response
 }
