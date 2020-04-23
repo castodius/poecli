@@ -109,7 +109,19 @@ export class POEditor {
   };
 
   public addLanguage = async (params: POEditorModels.AddLanguageRequest): Promise<void> => {
-    await this.callAPI<POEditorModels.AddLanguageRequest>('/languages/add', params)
+    await this.callAPI<POEditorModels.AddLanguageResponse>('/languages/add', params)
+  };
+
+  public updateLanguage = async (params: POEditorModels.UpdateLanguageRequest): Promise<POEditorModels.UpdateStatisticsObject> => {
+    const newParams: POEditorModels.UpdateLanguageRequestInternal = {
+      ...params,
+      data: JSON.stringify(params.data)
+    }
+    console.log(newParams)
+
+    const data = await this.callAPI < POEditorModels.UpdateLanguageResponse>('/languages/update', newParams)
+
+    return data.result.translations
   };
 
   public deleteLanguage = async (params: POEditorModels.DeleteLanguageRequest): Promise<void> => {

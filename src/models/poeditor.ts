@@ -53,6 +53,17 @@ export enum UpdateTag {
 
 export type UpdateTagObject = Record<UpdateTag, string[]>
 
+export type TranslationContent = string | { one: string, other: string };
+
+export interface LanguageUpdateObject {
+  term: string;
+  context: string;
+  translation: {
+    content: TranslationContent
+    fuzzy?: POBoolean
+  }
+}
+
 export interface POERequestBase {
 
 }
@@ -92,7 +103,7 @@ export interface ProjectLanguage extends Language {
 
 export interface TermBase {
   term: string;
-  context?: string;
+  context: string;
   plural?: string;
   reference?: string;
   tags?: string[];
@@ -103,7 +114,7 @@ export interface Term extends TermBase {
   created: string;
   updated: string;
   translation: {
-    content: string;
+    content: TranslationContent;
     fuzzy: POBoolean;
     proofread: POBoolean;
     updated: string;
@@ -233,6 +244,25 @@ export interface AddLanguageRequest extends POERequestBase {
 
 export interface AddLanguageResponse extends POEditorResponseBase {
 
+}
+
+interface UpdateLanguageRequestBase extends POERequestBase {
+  id: number;
+  language: string;
+  fuzzy_trigger?: POBoolean;
+}
+export interface UpdateLanguageRequest extends UpdateLanguageRequestBase {
+  data: LanguageUpdateObject[];
+}
+
+export interface UpdateLanguageRequestInternal extends UpdateLanguageRequestBase {
+  data: string;
+}
+
+export interface UpdateLanguageResponse extends POEditorResponseBase {
+  result: {
+    translations: UpdateStatisticsObject;
+  }
 }
 
 export interface DeleteLanguageRequest extends POERequestBase {
