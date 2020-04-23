@@ -47,6 +47,7 @@ export const upload = async (): Promise<void> => {
   const overwrite: POBooleanUndefined = await getOverwrite(updating)
   const syncTerms: POBooleanUndefined = await getSyncTerms(updating)
   const readFromSource: POBooleanUndefined = await getReadFromSource(file)
+  const fuzzyTrigger: POBoolean = await getFuzzyTrigger()
 
   const data = await poe.uploadProject({
     id: project.id,
@@ -55,7 +56,8 @@ export const upload = async (): Promise<void> => {
     language,
     overwrite,
     sync_terms: syncTerms,
-    read_from_source: readFromSource
+    read_from_source: readFromSource,
+    fuzzy_trigger: fuzzyTrigger
   })
   log.info(JSON.stringify(data))
 }
@@ -114,4 +116,16 @@ export const getReadFromSource = async (file: string): Promise<POBooleanUndefine
   ])
 
   return readFromSource ? 1 : 0
+}
+
+export const getFuzzyTrigger = async (): Promise<POBoolean> => {
+  const { fuzzyTrigger }: { fuzzyTrigger: boolean } = await inquirer.prompt([
+    {
+      name: 'overwrite',
+      type: 'confirm',
+      message: 'Do you want to mark translations for other languages as fuzzy?'
+    }
+  ])
+
+  return fuzzyTrigger ? 1 : 0
 }
