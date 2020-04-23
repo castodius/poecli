@@ -16,5 +16,5 @@ export const deleteLanguage = async (): Promise<void> => {
 
   await poe.deleteLanguage({ id: project.id, language: language.code })
 
-  log.info(`Successfully removes ${language.name} from ${project.name}`)
+  log.info(`Successfully removed ${language.name} from ${project.name}`)
 }
