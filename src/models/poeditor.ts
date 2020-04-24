@@ -284,3 +284,19 @@ export interface ListTermsResponse extends POEditorResponseBase {
     terms: Term[];
   }
 }
+
+export interface AddTermsRequest extends POERequestBase {
+  id: number;
+  terms: TermBase[];
+}
+
+export interface AddTermsRequestInternal extends POERequestBase {
+  id: number;
+  data: string;
+}
+
+export interface AddTermResponse extends POEditorResponseBase {
+  result: {
+    terms: UpdateStatisticsObject;
+  }
+}

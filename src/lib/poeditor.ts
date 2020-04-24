@@ -117,9 +117,8 @@ export class POEditor {
       ...params,
       data: JSON.stringify(params.data)
     }
-    console.log(newParams)
 
-    const data = await this.callAPI < POEditorModels.UpdateLanguageResponse>('/languages/update', newParams)
+    const data = await this.callAPI<POEditorModels.UpdateLanguageResponse>('/languages/update', newParams)
 
     return data.result.translations
   };
@@ -133,4 +132,15 @@ export class POEditor {
 
     return data.result.terms
   }
+
+  public addTerms = async (params: POEditorModels.AddTermsRequest): Promise<POEditorModels.UpdateStatisticsObject> => {
+    const newParams: POEditorModels.AddTermsRequestInternal = {
+      ...params,
+      data: JSON.stringify(params.terms)
+    }
+
+    const data = await this.callAPI<POEditorModels.AddTermResponse>('/terms/add', newParams)
+
+    return data.result.terms
+  };
 }
