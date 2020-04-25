@@ -121,6 +121,11 @@ export interface Term extends TermBase {
   };
 }
 
+export interface UpdateTerm extends TermBase {
+  new_term: string;
+  new_context: string;
+}
+
 export interface UpdateStatisticsObject {
   parsed?: number,
   added?: number,
@@ -296,6 +301,24 @@ export interface AddTermsRequestInternal extends POERequestBase {
 }
 
 export interface AddTermResponse extends POEditorResponseBase {
+  result: {
+    terms: UpdateStatisticsObject;
+  }
+}
+
+export interface UpdateTermsRequest extends POERequestBase {
+  id: number;
+  fuzzy_trigger?: POBoolean;
+  terms: UpdateTerm[];
+}
+
+export interface UpdateTermsRequestInternal extends POERequestBase {
+  id: number;
+  fuzzy_trigger?: POBoolean;
+  data: string;
+}
+
+export interface UpdateTermsResponse extends POEditorResponseBase {
   result: {
     terms: UpdateStatisticsObject;
   }

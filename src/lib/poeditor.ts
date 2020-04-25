@@ -143,4 +143,15 @@ export class POEditor {
 
     return data.result.terms
   };
+
+  public updateTerms = async (params: POEditorModels.UpdateTermsRequest): Promise<POEditorModels.UpdateStatisticsObject> => {
+    const newParams: POEditorModels.UpdateTermsRequestInternal = {
+      ...params,
+      data: JSON.stringify(params.terms)
+    }
+
+    const data = await this.callAPI<POEditorModels.UpdateTermsResponse>('/terms/update', newParams)
+
+    return data.result.terms
+  }
 }
