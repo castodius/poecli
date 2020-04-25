@@ -126,6 +126,12 @@ export interface UpdateTerm extends TermBase {
   new_context: string;
 }
 
+export interface AddTermComment {
+  term: string;
+  context: string;
+  comment: string;
+}
+
 export interface DeleteTerm {
   term: string;
   context: string;
@@ -340,6 +346,22 @@ export interface DeleteTermRequestInternal extends POERequestBase {
 }
 
 export interface DeleteTermsResponse extends POEditorResponseBase {
+  result: {
+    terms: UpdateStatisticsObject;
+  }
+}
+
+export interface AddCommentRequest extends POERequestBase {
+  id: number;
+  terms: AddTermComment[];
+}
+
+export interface AddCommentRequestInternal extends POERequestBase {
+  id: number;
+  data: string;
+}
+
+export interface AddCommentResponse extends POEditorResponseBase {
   result: {
     terms: UpdateStatisticsObject;
   }

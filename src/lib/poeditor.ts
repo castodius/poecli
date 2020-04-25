@@ -165,4 +165,15 @@ export class POEditor {
 
     return data.result.terms
   }
+
+  public addComment = async (params: POEditorModels.AddCommentRequest): Promise<POEditorModels.UpdateStatisticsObject> => {
+    const newParams: POEditorModels.AddCommentRequestInternal = {
+      ...params,
+      data: JSON.stringify(params.terms)
+    }
+
+    const data = await this.callAPI<POEditorModels.AddCommentResponse>('/terms/add_comment', newParams)
+
+    return data.result.terms
+  }
 }
