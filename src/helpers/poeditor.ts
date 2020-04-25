@@ -123,14 +123,14 @@ export const inputTerms = async (): Promise<TermBase[]> => {
         validate: validateTerm
       },
       {
-        name: 'comment',
-        type: 'input',
-        message: 'Input comment (optional)'
-      },
-      {
         name: 'context',
         type: 'input',
         message: 'Input context (optional)'
+      },
+      {
+        name: 'comment',
+        type: 'input',
+        message: 'Input comment (optional)'
       },
       {
         name: 'reference',
