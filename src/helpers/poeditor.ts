@@ -1,8 +1,10 @@
 import * as inquirer from 'inquirer'
+import * as checkbox from 'inquirer-checkbox-plus-prompt'
 
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage, TermBase } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase, Term } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
+inquirer.registerPrompt('checkbox-plus', checkbox)
 
 interface ProjectChoice {
   name: string;
@@ -206,4 +208,45 @@ export const validateTag = (value: string) => {
   }
 
   return true
+}
+
+interface TermChoice {
+  name: string;
+  value: Term;
+}
+
+export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[]> => {
+  const availableTerms: Term[] = await poe.listTerms({ id })
+  if (!availableTerms.length) {
+    return []
+  }
+
+  const choices = mapTermsToChoices(availableTerms)
+
+  const { terms }: { terms: Term[]} = await inquirer.prompt([
+    {
+      name: 'terms',
+      type: 'checkbox-plus',
+      message: 'Select terms for which you want to add comments',
+      source: async (_: string, input: string) => {
+        if (!input) {
+          return choices
+        }
+        return choices.filter((choice: TermChoice): boolean => {
+          return choice.name.includes(input)
+        })
+      }
+    }
+  ])
+
+  return terms
+}
+
+export const mapTermsToChoices = (terms: Term[]): TermChoice[] => {
+  return terms.map((term: Term): TermChoice => {
+    return {
+      name: `${term.term} ${term.context}`,
+      value: term
+    }
+  })
 }
