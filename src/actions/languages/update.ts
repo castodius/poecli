@@ -5,6 +5,7 @@ import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
 import { Term, LanguageUpdateObject, TranslationContent } from '@models/poeditor'
+import { getConfirm } from '@helpers/prompt'
 
 inquirer.registerPrompt('autocomplete', autocomplete)
 
@@ -24,7 +25,7 @@ export const update = async (): Promise<void> => {
     return
   }
 
-  const fuzzyTrigger = await getConfirm('Do you want to set translations for other languages as fuzzy?')
+  const fuzzyTrigger = await getConfirm('Do you want to mark translations for other languages as fuzzy?')
 
   const availableTerms: Term[] = await poe.listTerms({ id: project.id, language: language.code })
   const choices: TermContext[] = mapTerms(availableTerms)
@@ -70,16 +71,6 @@ export const update = async (): Promise<void> => {
 
   log.info(JSON.stringify(data))
   log.info(`Successfully removes ${language.name} from ${project.name}`)
-}
-
-export const getConfirm = async (message: string): Promise<boolean> => {
-  const { confirm }: { confirm: boolean } = await inquirer.prompt([{
-    name: 'confirm',
-    type: 'confirm',
-    message
-  }])
-
-  return confirm
 }
 
 export const mapTerms = (terms: Term[]): TermContext[] => {
