@@ -3,11 +3,13 @@ import * as inquirer from 'inquirer'
 import { list } from './list'
 import { add } from './add'
 import { update } from './update'
+import { deleteTerms } from './delete'
 
 enum Action {
   LIST,
   ADD,
-  UPDATE
+  UPDATE,
+  DELETE
 }
 
 export const entry = async (): Promise<void> => {
@@ -19,7 +21,8 @@ export const entry = async (): Promise<void> => {
       choices: [
         { name: 'List available terms for a project', value: Action.LIST },
         { name: 'Add terms to project', value: Action.ADD },
-        { name: 'Update terms', value: Action.UPDATE }
+        { name: 'Update terms', value: Action.UPDATE },
+        { name: 'Delete terms', value: Action.DELETE }
       ]
     }
   ])
@@ -35,6 +38,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.UPDATE: {
       await update()
+      break
+    }
+    case Action.DELETE: {
+      await deleteTerms()
       break
     }
   }
