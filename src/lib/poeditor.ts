@@ -154,4 +154,15 @@ export class POEditor {
 
     return data.result.terms
   }
+
+  public deleteTerms = async (params: POEditorModels.DeleteTermsRequest): Promise<POEditorModels.UpdateStatisticsObject> => {
+    const newParams: POEditorModels.DeleteTermRequestInternal = {
+      ...params,
+      data: JSON.stringify(params.terms)
+    }
+
+    const data = await this.callAPI<POEditorModels.DeleteTermsResponse>('/terms/delete', newParams)
+
+    return data.result.terms
+  }
 }
