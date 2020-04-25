@@ -1,6 +1,6 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, validateTerm } from '@helpers/poeditor'
+import { selectProject, validateTerm, inputTags } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
@@ -67,8 +67,11 @@ export const update = async (): Promise<void> => {
       }
     ])
 
+    const tags = await inputTags()
+
     updatedTerm.term = term.term
     updatedTerm.context = term.context
+    updatedTerm.tags = tags
     updatedTerms.push(updatedTerm)
 
     if (!(await getConfirm('Do you want to update another term?'))) {
