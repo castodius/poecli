@@ -126,7 +126,7 @@ export interface UpdateTerm extends TermBase {
   new_context: string;
 }
 
-export interface DeleteTermComment {
+export interface DeleteTerm {
   term: string;
   context: string;
 }
@@ -331,7 +331,7 @@ export interface UpdateTermsResponse extends POEditorResponseBase {
 
 export interface DeleteTermsRequest extends POERequestBase {
   id: number;
-  terms: DeleteTermComment[];
+  terms: DeleteTerm[];
 }
 
 export interface DeleteTermRequestInternal extends POERequestBase {

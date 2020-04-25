@@ -1,7 +1,7 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject } from '@helpers/poeditor'
-import { Term, DeleteTermComment } from '@models/poeditor'
+import { Term, DeleteTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 
@@ -52,8 +52,8 @@ export const mapTerms = (terms: Term[]): TermChoice[] => {
   })
 }
 
-export const mapChoiceToDeleteTerm = (terms: Term[]): DeleteTermComment[] => {
-  return terms.map(({ term, context }: Term): DeleteTermComment => {
+export const mapChoiceToDeleteTerm = (terms: Term[]): DeleteTerm[] => {
+  return terms.map(({ term, context }: Term): DeleteTerm => {
     return {
       term,
       context
