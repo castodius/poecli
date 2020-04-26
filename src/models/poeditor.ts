@@ -149,6 +149,33 @@ export interface UpdateStatistics {
   translations?: UpdateStatisticsObject;
 }
 
+export interface Contributor {
+  name: string;
+  email: string;
+  permissions: (AdminContributorPermissions | ContributorPermissions)[];
+}
+
+export interface ContributorPermissionsBase {
+  project: {
+    id: number;
+    name: string;
+  }
+  proofreader: boolean
+}
+
+export interface AdminContributorPermissions extends ContributorPermissionsBase {
+  type: 'administrator';
+}
+
+export interface ContributorPermissions extends ContributorPermissionsBase {
+  type: 'contributor';
+  languages: string[]
+}
+
+/**
+ * Beginning of requests and response
+ */
+
 export interface ListProjectsResponse extends POEditorResponseBase {
   result: {
     projects: CompactProject[]
@@ -364,5 +391,16 @@ export interface AddCommentRequestInternal extends POERequestBase {
 export interface AddCommentResponse extends POEditorResponseBase {
   result: {
     terms: UpdateStatisticsObject;
+  }
+}
+
+export interface ListContributorsRequest extends POERequestBase {
+  id?: number;
+  language?: string;
+}
+
+export interface ListContributorsResponse extends POEditorResponseBase {
+  result: {
+    contributors: Contributor[]
   }
 }

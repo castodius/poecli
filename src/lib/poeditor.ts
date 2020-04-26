@@ -176,4 +176,10 @@ export class POEditor {
 
     return data.result.terms
   }
+
+  public listContributors = async (params: POEditorModels.ListContributorsRequest): Promise<POEditorModels.Contributor[]> => {
+    const data = await this.callAPI<POEditorModels.ListContributorsResponse>('/contributors/list', params)
+
+    return data.result.contributors
+  }
 }
