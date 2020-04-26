@@ -9,6 +9,9 @@ inquirer.registerPrompt('checkbox-plus', checkbox)
 
 const filters = Object.values(ExportFilter)
 
+/**
+ * Exports project data
+ */
 export const exportProject = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -58,6 +61,13 @@ export const exportProject = async (): Promise<void> => {
   log.info(url)
 }
 
+/**
+ * Filter function for inquirer
+ * @param _
+ * Irrelevant
+ * @param input
+ * Input to filter
+ */
 export const filterSource = async (_: Record<string, string>, input: string): Promise<string[]> => {
   if (!input) {
     return filters
@@ -67,6 +77,11 @@ export const filterSource = async (_: Record<string, string>, input: string): Pr
   })
 }
 
+/**
+ * Validates tags
+ * @param value
+ * Value to validate
+ */
 export const validateTags = (value: string): string | boolean => {
   if (!value) {
     return true

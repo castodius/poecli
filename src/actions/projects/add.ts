@@ -3,6 +3,9 @@ import { POEditor } from '@lib/poeditor'
 import { AddProjectRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 
+/**
+ * Adds a new project
+ */
 export const add = async () => {
   const poe = new POEditor()
 
@@ -25,6 +28,11 @@ export const add = async () => {
   log.info(JSON.stringify(data))
 }
 
+/**
+ * Validates a project name
+ * @param value
+ * Value to validate
+ */
 export const validateName = (value: string): boolean | string => {
   if (!value.match(/.+/)) {
     return 'Please input a project name consisting of at least one character'

@@ -7,6 +7,9 @@ interface PromptResult {
   confirmation: boolean;
 }
 
+/**
+ * Deletes a project
+ */
 export const deleteProject = async (): Promise<void> => {
   const poe = new POEditor()
 

@@ -3,6 +3,9 @@ import * as log from '@lib/log'
 import { selectProject, inputTerms } from '@helpers/poeditor'
 import { TermBase } from '@models/poeditor'
 
+/**
+ * Manually syncs in terms to a project. DANGEROUS. Should not be used for existing projects.
+ */
 export const sync = async () => {
   const poe = new POEditor()
 

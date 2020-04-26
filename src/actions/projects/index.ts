@@ -20,6 +20,9 @@ enum Action {
   EXPORT
 }
 
+/**
+ * Entry for projects
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {

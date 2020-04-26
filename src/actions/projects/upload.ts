@@ -8,6 +8,9 @@ import { readdirSync } from 'fs'
 
 type POBooleanUndefined = POBoolean | undefined
 
+/**
+ * Uploads a file to POEditor which will add terms to a project
+ */
 export const upload = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -66,6 +69,15 @@ export const upload = async (): Promise<void> => {
   log.info(JSON.stringify(data))
 }
 
+/**
+ * Gets language which should be updated
+ * @param updating
+ * Type of update. terms, terms_translations or translations
+ * @param id
+ * Project id
+ * @param poe
+ * POEditor instance
+ */
 export const getLanguage = async (updating: UpdateType, id: number, poe: POEditor): Promise<string | undefined> => {
   if (updating === UpdateType.TERMS) {
     return
@@ -74,6 +86,11 @@ export const getLanguage = async (updating: UpdateType, id: number, poe: POEdito
   return (await selectProjectLanguage(poe, id))?.code
 }
 
+/**
+ * Forces the user to make a decision on whether or not to overwrite translations
+ * @param updating
+ * Type of update. terms, terms_translations or translations
+ */
 export const getOverwrite = async (updating: UpdateType): Promise<POBooleanUndefined> => {
   if (updating === UpdateType.TERMS) {
     return
@@ -90,6 +107,11 @@ export const getOverwrite = async (updating: UpdateType): Promise<POBooleanUndef
   return overwrite ? 1 : 0
 }
 
+/**
+ * Forces the user to make a decision on whether or not to sync terms
+ * @param updating
+ * Type of update. terms, terms_translations or translations
+ */
 export const getSyncTerms = async (updating: UpdateType): Promise<POBooleanUndefined> => {
   if (updating === UpdateType.TRANSLATIONS) {
     return
@@ -106,6 +128,11 @@ export const getSyncTerms = async (updating: UpdateType): Promise<POBooleanUndef
   return syncTerms ? 1 : 0
 }
 
+/**
+ * Forces the user to specify if they want to read from source for XLIFF files
+ * @param file
+ * Filename. For example file.xliff
+ */
 export const getReadFromSource = async (file: string): Promise<POBooleanUndefined> => {
   if (!file.endsWith(FileType.XLIFF)) {
     return
@@ -122,6 +149,9 @@ export const getReadFromSource = async (file: string): Promise<POBooleanUndefine
   return readFromSource ? 1 : 0
 }
 
+/**
+ * Forces the user to make a decision on fuzzy trigger
+ */
 export const getFuzzyTrigger = async (): Promise<POBoolean> => {
   const { fuzzyTrigger }: { fuzzyTrigger: boolean } = await inquirer.prompt([
     {
@@ -134,6 +164,11 @@ export const getFuzzyTrigger = async (): Promise<POBoolean> => {
   return fuzzyTrigger ? 1 : 0
 }
 
+/**
+ * Forces the user to input tags
+ * @param updating
+ * Type of update. terms, terms_translations or translations
+ */
 export const getTags = async (updating: UpdateType): Promise<UpdateTagObject | undefined> => {
   if (updating === UpdateType.TRANSLATIONS) {
     return

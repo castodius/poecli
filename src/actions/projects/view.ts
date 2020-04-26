@@ -2,6 +2,9 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject } from '@helpers/poeditor'
 
+/**
+ * Prints details about a project
+ */
 export const view = async (): Promise<void> => {
   const poe = new POEditor()
 

@@ -10,6 +10,9 @@ interface PromptResult {
   reference_language: string;
 }
 
+/**
+ * Updates project information
+ */
 export const update = async () => {
   const poe = new POEditor()
 
