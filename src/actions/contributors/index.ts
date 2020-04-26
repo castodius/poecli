@@ -10,6 +10,9 @@ enum Action {
   REMOVE
 }
 
+/**
+ * Entry point for contributors
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {

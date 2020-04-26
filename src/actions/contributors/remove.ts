@@ -14,6 +14,9 @@ interface ContributorChoice {
   value: Contributor
 }
 
+/**
+ * Removes one or more contributors from a project
+ */
 export const remove = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -75,6 +78,10 @@ export const remove = async (): Promise<void> => {
   }
 }
 
+/**
+ * Maps contributors to inquirer choice format
+ * @param contributors
+ */
 export const mapContributors = (contributors: Contributor[]): ContributorChoice[] => {
   return contributors.map((contributor: Contributor): ContributorChoice => {
     return {
@@ -84,12 +91,24 @@ export const mapContributors = (contributors: Contributor[]): ContributorChoice[
   })
 }
 
+/**
+ * Finds project permissions for a contributor
+ * @param contributor
+ * POEditor contributor data
+ * @param id
+ * Project id. For example 123456
+ */
 export const getProjectPermissions = (contributor: Contributor, id: number): AdminContributorPermissions | ContributorPermissions | undefined => {
   return contributor.permissions.find((permissions: AdminContributorPermissions | ContributorPermissions): boolean => {
     return permissions.project.id === id.toString()
   })
 }
 
+/**
+ * Multi-select languages
+ * @param languages
+ * Array of languages. For example ['sv', 'en']
+ */
 export const selectLanguages = async (languages: string[]): Promise<string[]> => {
   const { chosenLanguages }: { chosenLanguages: string[] } = await inquirer.prompt([
     {

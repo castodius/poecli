@@ -5,6 +5,9 @@ import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import { getConfirm } from '@helpers/prompt'
 import inquirer from 'inquirer'
 
+/**
+ * Adds a contributor to a project
+ */
 export const add = async (): Promise<void> => {
   const poe = new POEditor()
 

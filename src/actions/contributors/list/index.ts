@@ -8,6 +8,9 @@ enum Action {
   PROJECT
 }
 
+/**
+ * Entry point for listing contributors
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {
