@@ -7,6 +7,9 @@ import { entry as languagesEntry } from '@actions/languages/index'
 import { entry as termsEntry } from '@actions/terms/index'
 import { entry as contributorsEntry } from '@actions/contributors/index'
 
+/**
+ * Sets up things other than commands
+ */
 export const init = () => {
   // show text and stuff
 
@@ -15,6 +18,9 @@ export const init = () => {
   })
 }
 
+/**
+ * Adds services available to people with a token
+ */
 const addTokenServices = () => {
   commander
     .command('projects')
@@ -37,6 +43,9 @@ const addTokenServices = () => {
     .action(contributorsEntry)
 }
 
+/**
+ * Main, the entry point :)
+ */
 export const main = () => {
   init()
 
@@ -54,4 +63,5 @@ export const main = () => {
   }
 }
 
+// blast off!
 main()
