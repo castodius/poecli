@@ -15,6 +15,11 @@ interface ProjectOutput {
   project: CompactProject;
 }
 
+/**
+ * Forces the user to select a project
+ * @param poe
+ * POEditor instance
+ */
 export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
   const projects = await poe.listProjects()
 
@@ -31,6 +36,11 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
   return project
 }
 
+/**
+ * Maps projects to choices usable by inquirer
+ * @param projects
+ * List of projects
+ */
 export const mapProjectsToChoices = (projects: CompactProject[]): ProjectChoice[] => {
   return projects.map((project: CompactProject): ProjectChoice => {
     return {
@@ -49,6 +59,13 @@ export interface LanguageOutput {
   language: Language;
 }
 
+/**
+ * Forces the user to select a language from the list of all available languages
+ * @param poe
+ * POEditor instance
+ * @param exclude
+ * List of languages to exclude. Optional.
+ */
 export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language> => {
   let languages = await poe.getAvailableLanguages()
   if (exclude) {
@@ -68,6 +85,13 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   return language
 }
 
+/**
+ * Removes list of languages to exclude from another list
+ * @param languages
+ * Languages from which to filter
+ * @param filters
+ * Filters
+ */
 export const filterLanguages = (languages: Language[], filters: ProjectLanguage[]): Language[] => {
   const filterMap: BooleanMap = filters.reduce((acc: BooleanMap, language: ProjectLanguage) => {
     acc[language.code] = true
@@ -79,6 +103,11 @@ export const filterLanguages = (languages: Language[], filters: ProjectLanguage[
   })
 }
 
+/**
+ * Maps languages to inquirer format for choices
+ * @param languages
+ * Languages to map
+ */
 export const mapLanguagesToChoices = (languages: Language[]): LanguageChoice[] => {
   return languages.map((language: Language): LanguageChoice => {
     return {
@@ -92,6 +121,13 @@ export interface ProjectLanguageOutput {
   language: ProjectLanguage;
 }
 
+/**
+ * Forces the user to select a language from a project. If no language is available nothing gets returned
+ * @param poe
+ * POEditor instance
+ * @param id
+ * Project id. For example 123456
+ */
 export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<ProjectLanguage | undefined> => {
   const languages = await poe.getProjectLanguages({ id })
   if (!languages.length) {
@@ -111,6 +147,10 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
   return language
 }
 
+/**
+ * Forces the user to input at least one POEditor term.
+ * Can be used to input as many terms as the user want.
+ */
 export const inputTerms = async (): Promise<TermBase[]> => {
   const terms: TermBase[] = []
 
@@ -168,6 +208,11 @@ export const inputTerms = async (): Promise<TermBase[]> => {
   return terms
 }
 
+/**
+ * Checks that a term has a proper value.
+ * @param value
+ * String which should be validated.
+ */
 export const validateTerm = (value: string) => {
   if (!value && !value.trim()) {
     return 'Please input a term such as "PROJECT_NAME"'
@@ -176,6 +221,9 @@ export const validateTerm = (value: string) => {
   return true
 }
 
+/**
+ * Forces the user to input at least one POEditor tag.
+ */
 export const inputTags = async (): Promise<string[]> => {
   const tags: string[] = []
   let tag: string = 'something'
@@ -198,6 +246,11 @@ export const inputTags = async (): Promise<string[]> => {
   return tags
 }
 
+/**
+ * Validates the format of a tag
+ * @param value
+ * Value to validate
+ */
 export const validateTag = (value: string) => {
   if (!value) {
     return true
@@ -215,6 +268,13 @@ interface TermChoice {
   value: Term;
 }
 
+/**
+ * Forces the user to select one or more terms
+ * @param poe
+ * POEditor instance
+ * @param id
+ * Project id. For example 123456
+ */
 export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[]> => {
   const availableTerms: Term[] = await poe.listTerms({ id })
   if (!availableTerms.length) {
@@ -242,6 +302,11 @@ export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[
   return terms
 }
 
+/**
+ * Maps terms to inquirer format choices
+ * @param terms
+ * Terms to map
+ */
 export const mapTermsToChoices = (terms: Term[]): TermChoice[] => {
   return terms.map((term: Term): TermChoice => {
     return {
