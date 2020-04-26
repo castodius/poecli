@@ -1,8 +1,8 @@
 # POECli - POEditor CLI
 
-An interactive CLI for [POEditor](https://poeditor.com), a software localization service. Create projects, add terms, translations and add contributors as you see fit.
-
 **THIS IS STILL WORK IN PROGRESS, MORE UPDATES TO COME**
+
+An interactive CLI for [POEditor](https://poeditor.com), a software localization service. Manage projects, terms, languages and contributors as you see fit.
 
 ## Installation
 
