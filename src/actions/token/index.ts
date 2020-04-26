@@ -9,6 +9,9 @@ enum Action {
   SET,
 }
 
+/**
+ * Entry point for token
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {
@@ -31,6 +34,9 @@ export const entry = async (): Promise<void> => {
   }
 }
 
+/**
+ * Gets the available choices. Checks if the user has a token or not
+ */
 export const getChoices = () => {
   const choices = []
   if (getToken()) {

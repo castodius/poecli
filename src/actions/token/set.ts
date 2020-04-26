@@ -3,6 +3,9 @@ import inquirer from 'inquirer'
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 
+/**
+ * Gets, verifies and sets a token
+ */
 export const set = async (): Promise<void> => {
   const token = await getToken()
 
@@ -10,6 +13,9 @@ export const set = async (): Promise<void> => {
   log.info('Token verified and stored')
 }
 
+/**
+ * Forces the user to input a token. Runs until a valid token has been input
+ */
 export const getToken = async (): Promise<string> => {
   while (true) {
     const { token } = await prompt()
@@ -20,6 +26,11 @@ export const getToken = async (): Promise<string> => {
   }
 }
 
+/**
+ * Verifies a token by running list projects
+ * @param token
+ * POEditor token
+ */
 export const verifyToken = async (token: string): Promise<boolean> => {
   const poe = new POEditor(token)
 
@@ -32,6 +43,9 @@ export const verifyToken = async (token: string): Promise<boolean> => {
   }
 }
 
+/**
+ * Forces the user to input a token
+ */
 export const prompt = async () => {
   return await inquirer.prompt([{
     name: 'token',
@@ -41,6 +55,10 @@ export const prompt = async () => {
   }])
 }
 
+/**
+ * Validates that the token is defined and consists of 32 hexadecimal characters
+ * @param value
+ */
 export const validate = (value: string): boolean | string => {
   if (!value.match(/^[0-9a-f]+$/)) {
     return 'Please input a token consisting of numbers and the letters a through f'
