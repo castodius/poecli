@@ -1,9 +1,11 @@
 import * as inquirer from 'inquirer'
 
 import { entry as listEntry } from './list/index'
+import { add } from './add'
 
 enum Action {
   LIST,
+  ADD
 }
 
 export const entry = async (): Promise<void> => {
@@ -13,7 +15,8 @@ export const entry = async (): Promise<void> => {
       type: 'list',
       message: 'Select contributors action:',
       choices: [
-        { name: 'List contributors', value: Action.LIST }
+        { name: 'List contributors', value: Action.LIST },
+        { name: 'Add contributor to project', value: Action.ADD }
       ]
     }
   ])
@@ -21,6 +24,10 @@ export const entry = async (): Promise<void> => {
   switch (action) {
     case Action.LIST: {
       await listEntry()
+      break
+    }
+    case Action.ADD: {
+      await add()
       break
     }
   }
