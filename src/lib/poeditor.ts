@@ -182,4 +182,8 @@ export class POEditor {
 
     return data.result.contributors
   }
+
+  public addContributor = async (params: POEditorModels.AddContributorRequest): Promise<void> => {
+    await this.callAPI<POEditorModels.AddContributorResponse>('/contributors/add', params)
+  }
 }

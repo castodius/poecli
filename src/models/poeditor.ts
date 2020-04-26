@@ -404,3 +404,15 @@ export interface ListContributorsResponse extends POEditorResponseBase {
     contributors: Contributor[]
   }
 }
+
+export interface AddContributorRequest extends POERequestBase {
+  id: number;
+  name: string;
+  email: string;
+  language?: string;
+  admin?: POBoolean;
+}
+
+export interface AddContributorResponse extends POEditorResponseBase {
+
+}
