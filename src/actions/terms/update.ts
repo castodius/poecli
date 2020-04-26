@@ -13,6 +13,9 @@ interface TermChoice {
   value: Term
 }
 
+/**
+ * Updates terms
+ */
 export const update = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -87,6 +90,11 @@ export const update = async (): Promise<void> => {
   log.info(JSON.stringify(data))
 }
 
+/**
+ * Maps terms to inquirer choice format
+ * @param terms
+ * Array of terms to maps
+ */
 export const mapTerms = (terms: Term[]): TermChoice[] => {
   return terms.map((term: Term): TermChoice => {
     return {

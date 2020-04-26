@@ -14,6 +14,9 @@ enum Action {
   COMMENT
 }
 
+/**
+ * Entry point for terms
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {

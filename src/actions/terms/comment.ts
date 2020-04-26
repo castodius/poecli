@@ -4,6 +4,9 @@ import { selectProject, multiSelectTerms } from '@helpers/poeditor'
 import { Term, AddTermComment } from '@models/poeditor'
 import inquirer from 'inquirer'
 
+/**
+ * Adds comments to terms
+ */
 export const comment = async (): Promise<void> => {
   const poe = new POEditor()
 

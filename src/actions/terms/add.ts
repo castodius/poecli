@@ -3,6 +3,9 @@ import * as log from '@lib/log'
 import { selectProject, inputTerms } from '@helpers/poeditor'
 import { TermBase } from '@models/poeditor'
 
+/**
+ * Adds terms to a project
+ */
 export const add = async (): Promise<void> => {
   const poe = new POEditor()
 

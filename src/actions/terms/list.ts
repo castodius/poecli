@@ -4,6 +4,9 @@ import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import inquirer from 'inquirer'
 import { ListTermsRequest } from '@models/poeditor'
 
+/**
+ * Lists terms
+ */
 export const list = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -34,6 +37,13 @@ export const list = async (): Promise<void> => {
   await call(poe, { id: project.id, language: language ? language.code : undefined })
 }
 
+/**
+ * Makes the call to POEditor listing terms
+ * @param poe
+ * POEditor instance
+ * @param params
+ * Params for which to list
+ */
 export const call = async (poe: POEditor, params: ListTermsRequest): Promise<void> => {
   const data = await poe.listTerms(params)
   log.info(JSON.stringify(data))
