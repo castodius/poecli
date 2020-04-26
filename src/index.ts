@@ -5,6 +5,7 @@ import { entry as tokenEntry } from '@actions/token/index'
 import { entry as projectsEntry } from '@actions/projects/index'
 import { entry as languagesEntry } from '@actions/languages/index'
 import { entry as termsEntry } from '@actions/terms/index'
+import { entry as contributorsEntry } from '@actions/contributors/index'
 
 export const init = () => {
   // show text and stuff
@@ -29,6 +30,11 @@ const addTokenServices = () => {
     .command('terms')
     .description('Manage terms')
     .action(termsEntry)
+
+  commander
+    .command('contributors')
+    .description('Manage contributors')
+    .action(contributorsEntry)
 }
 
 export const main = () => {
