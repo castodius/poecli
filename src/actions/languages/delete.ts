@@ -3,6 +3,9 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 
+/**
+ * Deletes a language from a project
+ */
 export const deleteLanguage = async (): Promise<void> => {
   const poe = new POEditor()
 

@@ -3,6 +3,9 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectLanguage, selectProject } from '@helpers/poeditor'
 
+/**
+ * Adds a language to a project
+ */
 export const add = async (): Promise<void> => {
   const poe = new POEditor()
 

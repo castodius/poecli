@@ -14,6 +14,9 @@ enum Action {
   DELETE
 }
 
+/**
+ * Entry point for languages
+ */
 export const entry = async (): Promise<void> => {
   const { action } = await inquirer.prompt([
     {

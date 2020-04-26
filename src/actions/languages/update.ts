@@ -14,6 +14,9 @@ interface TermContext {
   value: Term;
 }
 
+/**
+ * Updates translations for a project+language
+ */
 export const update = async (): Promise<void> => {
   const poe = new POEditor()
 
@@ -73,6 +76,11 @@ export const update = async (): Promise<void> => {
   log.info(`Successfully removes ${language.name} from ${project.name}`)
 }
 
+/**
+ * Maps terms to inquirer choice format
+ * @param terms
+ * Array of term to map
+ */
 export const mapTerms = (terms: Term[]): TermContext[] => {
   return terms.map((term: Term): TermContext => {
     return {
@@ -82,6 +90,11 @@ export const mapTerms = (terms: Term[]): TermContext[] => {
   })
 }
 
+/**
+ * Forces user to input optionally new translations for terms. Handles both singular and plural translations
+ * @param term
+ * Term to translate
+ */
 export const getContent = async (term: Term): Promise<TranslationContent> => {
   const termContent: TranslationContent = term.translation.content
   if (typeof termContent === 'string') {
@@ -94,6 +107,13 @@ export const getContent = async (term: Term): Promise<TranslationContent> => {
   }
 }
 
+/**
+ * Forces the user to translations a term
+ * @param message
+ * Message to display to the user
+ * @param defaultValue
+ * Value to display as default, making it easier for the user to not overwrite valid values
+ */
 export const getTranslation = async (message: string, defaultValue?: string): Promise<string> => {
   const { translation }: { translation: string } = await inquirer.prompt([{
     name: 'translation',
