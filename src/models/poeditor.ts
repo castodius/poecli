@@ -51,6 +51,11 @@ export enum UpdateTag {
   OVERWRITTEN_TRANSLATIONS = 'overwritten_translations'
 }
 
+export enum ContributorType {
+  ADMIN = 'administrator',
+  CONTRIBUTOR = 'contributor'
+}
+
 export type UpdateTagObject = Record<UpdateTag, string[]>
 
 export type TranslationContent = string | { one: string, other: string };
@@ -157,18 +162,18 @@ export interface Contributor {
 
 export interface ContributorPermissionsBase {
   project: {
-    id: number;
+    id: string;
     name: string;
   }
   proofreader: boolean
 }
 
 export interface AdminContributorPermissions extends ContributorPermissionsBase {
-  type: 'administrator';
+  type: ContributorType.ADMIN;
 }
 
 export interface ContributorPermissions extends ContributorPermissionsBase {
-  type: 'contributor';
+  type: ContributorType.CONTRIBUTOR;
   languages: string[]
 }
 
@@ -414,5 +419,15 @@ export interface AddContributorRequest extends POERequestBase {
 }
 
 export interface AddContributorResponse extends POEditorResponseBase {
+
+}
+
+export interface RemoveContributorRequest extends POERequestBase {
+  id: number;
+  email: string;
+  language?: string;
+}
+
+export interface RemoveContributorResponse extends POEditorResponseBase {
 
 }

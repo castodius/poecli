@@ -186,4 +186,8 @@ export class POEditor {
   public addContributor = async (params: POEditorModels.AddContributorRequest): Promise<void> => {
     await this.callAPI<POEditorModels.AddContributorResponse>('/contributors/add', params)
   }
+
+  public removeContributor = async (params: POEditorModels.RemoveContributorRequest): Promise<void> => {
+    await this.callAPI<POEditorModels.RemoveContributorResponse>('/contributors/remove', params)
+  }
 }
