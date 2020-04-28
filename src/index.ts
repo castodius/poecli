@@ -1,4 +1,5 @@
 import * as commander from 'commander'
+import { textSync } from 'figlet'
 
 import { getToken } from '@helpers/config'
 import { entry as tokenEntry } from '@actions/token/index'
@@ -11,7 +12,8 @@ import { entry as contributorsEntry } from '@actions/contributors/index'
  * Sets up things other than commands
  */
 export const init = () => {
-  // show text and stuff
+  commander
+    .description(textSync('POECLI') + '\nAn interactive POEditor CLI')
 
   commander.on('command:*', () => {
     console.log(`Invalid command: ${commander.args.join(' ')}\nSee --help for a list of available commands.`)
