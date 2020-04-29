@@ -2,14 +2,14 @@ import { POEditor } from '@lib/poeditor'
 import { Contributor, ListContributorsRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 
 export const project = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
 
-  const addLanguage = await getConfirm('Get contributors for specific langauge?')
+  const addLanguage = await getConfirmation('Get contributors for specific langauge?')
 
   const params: ListContributorsRequest = {
     id: project.id

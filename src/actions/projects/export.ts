@@ -4,7 +4,7 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
 import { FileType, ExportFilter } from '@models/poeditor'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 
 inquirer.registerPrompt('checkbox-plus', checkbox)
 
@@ -42,7 +42,7 @@ export const exportProject = async (): Promise<void> => {
 
   const tags: string[] = await inputTags()
 
-  const order = await getConfirm('Order alphabetically by terms?')
+  const order = await getConfirmation('Order alphabetically by terms?')
 
   const url = await poe.exportProject({
     id: project.id,

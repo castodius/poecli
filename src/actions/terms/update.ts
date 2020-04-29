@@ -4,7 +4,7 @@ import { selectProject, validateTerm, inputTags } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 
 inquirer.registerPrompt('autocomplete', autocomplete)
 
@@ -77,12 +77,12 @@ export const update = async (): Promise<void> => {
     updatedTerm.tags = tags
     updatedTerms.push(updatedTerm)
 
-    if (!(await getConfirm('Do you want to update another term?'))) {
+    if (!(await getConfirmation('Do you want to update another term?'))) {
       break
     }
   }
 
-  const fuzzyTrigger = await getConfirm('Do you want to mark translations for other languages as fuzzy?')
+  const fuzzyTrigger = await getConfirmation('Do you want to mark translations for other languages as fuzzy?')
 
   const data = await poe.updateTerms({ id: project.id, terms: updatedTerms, fuzzy_trigger: fuzzyTrigger ? 1 : 0 })
 

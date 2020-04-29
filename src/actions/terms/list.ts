@@ -2,7 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import { ListTermsRequest } from '@models/poeditor'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 
 /**
  * Lists terms
@@ -19,7 +19,7 @@ export const list = async (): Promise<void> => {
     return
   }
 
-  const confirmation = await getConfirm('Would you like to return terms for a language?')
+  const confirmation = await getConfirmation('Would you like to return terms for a language?')
 
   if (!confirmation) {
     await call(poe, { id: project.id })

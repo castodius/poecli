@@ -5,7 +5,7 @@ import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poedit
 import inquirer from 'inquirer'
 import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject } from '@models/poeditor'
 import { readdirSync } from 'fs'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 
 type POBooleanUndefined = POBoolean | undefined
 
@@ -97,7 +97,7 @@ export const getOverwrite = async (updating: UpdateType): Promise<POBooleanUndef
     return
   }
 
-  const overwrite = await getConfirm('Do you want to overwrite existing translations in the project?')
+  const overwrite = await getConfirmation('Do you want to overwrite existing translations in the project?')
 
   return overwrite ? 1 : 0
 }
@@ -112,7 +112,7 @@ export const getSyncTerms = async (updating: UpdateType): Promise<POBooleanUndef
     return
   }
 
-  const syncTerms = await getConfirm('Do you want to sync terms? Syncing terms will remove from the project which are not present in your file.')
+  const syncTerms = await getConfirmation('Do you want to sync terms? Syncing terms will remove from the project which are not present in your file.')
 
   return syncTerms ? 1 : 0
 }
@@ -127,7 +127,7 @@ export const getReadFromSource = async (file: string): Promise<POBooleanUndefine
     return
   }
 
-  const readFromSource = await getConfirm('Do you want to import translations from the source tag?')
+  const readFromSource = await getConfirmation('Do you want to import translations from the source tag?')
 
   return readFromSource ? 1 : 0
 }
@@ -136,7 +136,7 @@ export const getReadFromSource = async (file: string): Promise<POBooleanUndefine
  * Forces the user to make a decision on fuzzy trigger
  */
 export const getFuzzyTrigger = async (): Promise<POBoolean> => {
-  const fuzzyTrigger = await getConfirm('Do you want to mark translations for other languages as fuzzy?')
+  const fuzzyTrigger = await getConfirmation('Do you want to mark translations for other languages as fuzzy?')
 
   return fuzzyTrigger ? 1 : 0
 }

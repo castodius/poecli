@@ -4,7 +4,7 @@ import * as checkbox from 'inquirer-checkbox-plus-prompt'
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirm } from './prompt'
+import { getConfirmation } from './prompt'
 inquirer.registerPrompt('checkbox-plus', checkbox)
 
 interface ProjectChoice {
@@ -193,7 +193,7 @@ export const inputTerms = async (): Promise<TermBase[]> => {
     }
     terms.push(term)
 
-    const confirm = await getConfirm('Do you want to add another term?')
+    const confirm = await getConfirmation('Do you want to add another term?')
     if (!confirm) {
       break
     }

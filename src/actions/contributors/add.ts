@@ -2,7 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import { AddContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 import inquirer from 'inquirer'
 
 /**
@@ -31,7 +31,7 @@ export const add = async (): Promise<void> => {
     name,
     email
   }
-  const admin = await getConfirm('Should the contributor be an admin for the project?')
+  const admin = await getConfirmation('Should the contributor be an admin for the project?')
 
   if (admin) {
     params.admin = 1

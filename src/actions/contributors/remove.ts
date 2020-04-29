@@ -2,7 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject } from '@helpers/poeditor'
-import { getConfirm } from '@helpers/prompt'
+import { getConfirmation } from '@helpers/prompt'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
@@ -57,7 +57,7 @@ export const remove = async (): Promise<void> => {
     email: contributor.email
   }
   if (projectPermissions.type === ContributorType.ADMIN) {
-    const removeAdmin = await getConfirm('You are about to remove an admin from a project. Do you want to proceed?')
+    const removeAdmin = await getConfirmation('You are about to remove an admin from a project. Do you want to proceed?')
     if (!removeAdmin) {
       return
     }

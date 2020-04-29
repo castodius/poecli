@@ -5,7 +5,7 @@ import inquirer from 'inquirer'
  * @param message
  * Message to display to user. Should be a question.
  */
-export const getConfirm = async (message: string): Promise<boolean> => {
+export const getConfirmation = async (message: string): Promise<boolean> => {
   const { confirm }: { confirm: boolean } = await inquirer.prompt([{
     name: 'confirm',
     type: 'confirm',
