@@ -1,18 +1,13 @@
 import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
-import { selectProject } from '@helpers/poeditor'
-import { getConfirmation } from '@helpers/prompt'
+import { selectProject, getContributorName } from '@helpers/poeditor'
+import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 inquirer.registerPrompt('autocomplete', autocomplete)
 inquirer.registerPrompt('checkbox-plus', checkbox)
-
-interface ContributorChoice {
-  name: string,
-  value: Contributor
-}
 
 /**
  * Removes one or more contributors from a project
@@ -28,7 +23,7 @@ export const remove = async (): Promise<void> => {
     return
   }
 
-  const choices = mapContributors(contributors)
+  const choices = mapToChoices<Contributor>(contributors, getContributorName)
 
   const { contributor }: { contributor: Contributor } = await inquirer.prompt([
     {
@@ -39,7 +34,7 @@ export const remove = async (): Promise<void> => {
         if (!input) {
           return choices
         }
-        return choices.filter((choice: ContributorChoice): boolean => {
+        return choices.filter((choice: Choice<Contributor>): boolean => {
           return choice.name.includes(input)
         })
       }
@@ -76,19 +71,6 @@ export const remove = async (): Promise<void> => {
       log.info(`${contributor.email} removed from ${languages[i]}`)
     }
   }
-}
-
-/**
- * Maps contributors to inquirer choice format
- * @param contributors
- */
-export const mapContributors = (contributors: Contributor[]): ContributorChoice[] => {
-  return contributors.map((contributor: Contributor): ContributorChoice => {
-    return {
-      name: `${contributor.name} ${contributor.email}`,
-      value: contributor
-    }
-  })
 }
 
 /**

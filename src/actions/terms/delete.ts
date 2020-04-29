@@ -1,16 +1,12 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject } from '@helpers/poeditor'
+import { selectProject, getTermName } from '@helpers/poeditor'
 import { Term, DeleteTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
+import { mapToChoices, Choice } from '@helpers/prompt'
 
 inquirer.registerPrompt('checkbox-plus', checkbox)
-
-interface TermChoice {
-  name: string,
-  value: Term
-}
 
 export const deleteTerms = async (): Promise<void> => {
   const poe = new POEditor()
@@ -18,7 +14,7 @@ export const deleteTerms = async (): Promise<void> => {
   const project = await selectProject(poe)
 
   const terms: Term[] = await poe.listTerms({ id: project.id })
-  const choices: TermChoice[] = mapTerms(terms)
+  const choices = mapToChoices<Term>(terms, getTermName)
 
   const { toDelete }: { toDelete: Term[] } = await inquirer.prompt([
     {
@@ -26,11 +22,11 @@ export const deleteTerms = async (): Promise<void> => {
       type: 'checkbox-plus',
       message: 'Select terms to delete',
       searchable: true,
-      source: async (_: Record<string, string>, input: string): Promise<TermChoice[]> => {
+      source: async (_: Record<string, string>, input: string): Promise<Choice<Term>[]> => {
         if (!input) {
           return choices
         }
-        return choices.filter((choice: TermChoice): boolean => {
+        return choices.filter((choice: Choice<Term>): boolean => {
           return choice.name.includes(input)
         })
       }
@@ -41,15 +37,6 @@ export const deleteTerms = async (): Promise<void> => {
 
   log.info('Terms deleted')
   log.info(JSON.stringify(data))
-}
-
-export const mapTerms = (terms: Term[]): TermChoice[] => {
-  return terms.map((term: Term): TermChoice => {
-    return {
-      name: term.context ? `${term.term} ${term.context}` : term.term,
-      value: term
-    }
-  })
 }
 
 export const mapChoiceToDeleteTerm = (terms: Term[]): DeleteTerm[] => {

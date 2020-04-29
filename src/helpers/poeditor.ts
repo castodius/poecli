@@ -2,19 +2,10 @@ import * as inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage, TermBase, Term } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation } from './prompt'
+import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
 inquirer.registerPrompt('checkbox-plus', checkbox)
-
-interface ProjectChoice {
-  name: string;
-  value: CompactProject;
-}
-
-interface ProjectOutput {
-  project: CompactProject;
-}
 
 /**
  * Forces the user to select a project
@@ -24,8 +15,8 @@ interface ProjectOutput {
 export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
   const projects = await poe.listProjects()
 
-  const choices: ProjectChoice[] = mapProjectsToChoices(projects)
-  const { project }: ProjectOutput = await inquirer.prompt([
+  const choices = mapToChoices<CompactProject>(projects, getCompactProjectName)
+  const { project }: { project: CompactProject } = await inquirer.prompt([
     {
       name: 'project',
       type: 'list',
@@ -35,29 +26,6 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
   ])
 
   return project
-}
-
-/**
- * Maps projects to choices usable by inquirer
- * @param projects
- * List of projects
- */
-export const mapProjectsToChoices = (projects: CompactProject[]): ProjectChoice[] => {
-  return projects.map((project: CompactProject): ProjectChoice => {
-    return {
-      name: `${project.name} - ${project.id}`,
-      value: project
-    }
-  })
-}
-
-export interface LanguageChoice {
-  name: string;
-  value: Language;
-}
-
-export interface LanguageOutput {
-  language: Language;
 }
 
 /**
@@ -73,8 +41,8 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
     languages = filterLanguages(languages, exclude)
   }
 
-  const choices: LanguageChoice[] = mapLanguagesToChoices(languages)
-  const { language }: LanguageOutput = await inquirer.prompt([
+  const choices = mapToChoices<Language>(languages, getLanguageName)
+  const { language }: {language: Language} = await inquirer.prompt([
     {
       name: 'language',
       type: 'list',
@@ -105,24 +73,6 @@ export const filterLanguages = (languages: Language[], filters: ProjectLanguage[
 }
 
 /**
- * Maps languages to inquirer format for choices
- * @param languages
- * Languages to map
- */
-export const mapLanguagesToChoices = (languages: Language[]): LanguageChoice[] => {
-  return languages.map((language: Language): LanguageChoice => {
-    return {
-      name: `${language.name} - ${language.code}`,
-      value: language
-    }
-  })
-}
-
-export interface ProjectLanguageOutput {
-  language: ProjectLanguage;
-}
-
-/**
  * Forces the user to select a language from a project. If no language is available nothing gets returned
  * @param poe
  * POEditor instance
@@ -135,8 +85,8 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
     return
   }
 
-  const choices: LanguageChoice[] = mapLanguagesToChoices(languages)
-  const { language }: ProjectLanguageOutput = await inquirer.prompt([
+  const choices = mapToChoices<Language>(languages, getLanguageName)
+  const { language }: {language: ProjectLanguage} = await inquirer.prompt([
     {
       name: 'language',
       type: 'list',
@@ -257,11 +207,6 @@ export const validateTag = (value: string) => {
   return true
 }
 
-interface TermChoice {
-  name: string;
-  value: Term;
-}
-
 /**
  * Forces the user to select one or more terms
  * @param poe
@@ -275,9 +220,9 @@ export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[
     return []
   }
 
-  const choices = mapTermsToChoices(availableTerms)
+  const choices = mapToChoices<Term>(availableTerms, getTermName)
 
-  const { terms }: { terms: Term[]} = await inquirer.prompt([
+  const { terms }: { terms: Term[] } = await inquirer.prompt([
     {
       name: 'terms',
       type: 'checkbox-plus',
@@ -286,7 +231,7 @@ export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[
         if (!input) {
           return choices
         }
-        return choices.filter((choice: TermChoice): boolean => {
+        return choices.filter((choice: Choice<Term>): boolean => {
           return choice.name.includes(input)
         })
       }
@@ -297,15 +242,36 @@ export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[
 }
 
 /**
- * Maps terms to inquirer format choices
- * @param terms
- * Terms to map
+ * Returns a contributor name for display in inquirer as a choice
+ * @param contributor
+ * Contributor object
  */
-export const mapTermsToChoices = (terms: Term[]): TermChoice[] => {
-  return terms.map((term: Term): TermChoice => {
-    return {
-      name: `${term.term} ${term.context}`,
-      value: term
-    }
-  })
+export const getContributorName = (contributor: Contributor) => {
+  return `${contributor.name} ${contributor.email}`
+}
+
+/**
+ * Returns a term name for display in inquirer as a choice
+ * @param term
+ * Term object
+ */
+export const getTermName = (term: Term) => {
+  return term.context ? `${term.term} ${term.context}` : term.term
+}
+
+/**
+ * Returns a project name for display in inquirer as a choice
+ * @param project
+ * Project object
+ */
+export const getCompactProjectName = (project: CompactProject) => {
+  return `${project.name} - ${project.id}`
+}
+
+/**
+ * Returns a project language for displayin in inquirer as a choice
+ * @param language
+ */
+export const getLanguageName = (language: Language) => {
+  return `${language.name} - ${language.code}`
 }

@@ -1,17 +1,12 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, validateTerm, inputTags } from '@helpers/poeditor'
+import { selectProject, validateTerm, inputTags, getTermName } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
-import { getConfirmation } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
 
 inquirer.registerPrompt('autocomplete', autocomplete)
-
-interface TermChoice {
-  name: string,
-  value: Term
-}
 
 /**
  * Updates terms
@@ -22,7 +17,7 @@ export const update = async (): Promise<void> => {
   const project = await selectProject(poe)
 
   const terms: Term[] = await poe.listTerms({ id: project.id })
-  const choices: TermChoice[] = mapTerms(terms)
+  const choices = mapToChoices<Term>(terms, getTermName)
 
   const updatedTerms: UpdateTerm[] = []
 
@@ -35,7 +30,7 @@ export const update = async (): Promise<void> => {
         if (!input) {
           return choices
         }
-        return choices.filter((choice: TermChoice): boolean => {
+        return choices.filter((choice: Choice<Term>): boolean => {
           return choice.name.includes(input)
         })
       }
@@ -88,18 +83,4 @@ export const update = async (): Promise<void> => {
 
   log.info('Terms updated')
   log.info(JSON.stringify(data))
-}
-
-/**
- * Maps terms to inquirer choice format
- * @param terms
- * Array of terms to maps
- */
-export const mapTerms = (terms: Term[]): TermChoice[] => {
-  return terms.map((term: Term): TermChoice => {
-    return {
-      name: term.context ? `${term.term} ${term.context}` : term.term,
-      value: term
-    }
-  })
 }

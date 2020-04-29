@@ -1,18 +1,13 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, getTermName } from '@helpers/poeditor'
 import inquirer from 'inquirer'
 import * as autocomplete from 'inquirer-autocomplete-prompt'
 import { Term, LanguageUpdateObject, TranslationContent } from '@models/poeditor'
-import { getConfirmation } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
 
 inquirer.registerPrompt('autocomplete', autocomplete)
-
-interface TermContext {
-  name: string;
-  value: Term;
-}
 
 /**
  * Updates translations for a project+language
@@ -31,7 +26,7 @@ export const update = async (): Promise<void> => {
   const fuzzyTrigger = await getConfirmation('Do you want to mark translations for other languages as fuzzy?')
 
   const availableTerms: Term[] = await poe.listTerms({ id: project.id, language: language.code })
-  const choices: TermContext[] = mapTerms(availableTerms)
+  const choices = mapToChoices<Term>(availableTerms, getTermName)
 
   const terms: LanguageUpdateObject[] = []
 
@@ -44,7 +39,7 @@ export const update = async (): Promise<void> => {
         if (!input) {
           return choices
         }
-        return choices.filter((choice: TermContext): boolean => {
+        return choices.filter((choice: Choice<Term>): boolean => {
           return choice.name.includes(input)
         })
       }
@@ -74,20 +69,6 @@ export const update = async (): Promise<void> => {
 
   log.info(JSON.stringify(data))
   log.info(`Successfully removes ${language.name} from ${project.name}`)
-}
-
-/**
- * Maps terms to inquirer choice format
- * @param terms
- * Array of term to map
- */
-export const mapTerms = (terms: Term[]): TermContext[] => {
-  return terms.map((term: Term): TermContext => {
-    return {
-      name: term.context ? `${term.term} ${term.context}` : term.term,
-      value: term
-    }
-  })
 }
 
 /**
