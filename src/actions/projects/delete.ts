@@ -10,6 +10,10 @@ export const deleteProject = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
   const confirmation = await getConfirmation('Are you sure you want to delete this project? This action will only work if you are the owner of the project (which the CLI cannot verify).')
 

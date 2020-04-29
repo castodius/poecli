@@ -12,6 +12,10 @@ export const add = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
   const { name, email }: {name: string, email: string} = await inquirer.prompt([
     {

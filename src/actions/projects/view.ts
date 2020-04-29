@@ -8,8 +8,12 @@ import { selectProject } from '@helpers/poeditor'
 export const view = async (): Promise<void> => {
   const poe = new POEditor()
 
-  const id: number = (await selectProject(poe)).id
+  const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
-  const data = await poe.viewProject({ id })
+  const data = await poe.viewProject({ id: project.id })
   log.info(JSON.stringify(data))
 }

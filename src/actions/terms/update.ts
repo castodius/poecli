@@ -15,6 +15,10 @@ export const update = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
   const terms: Term[] = await poe.listTerms({ id: project.id })
   const choices = mapToChoices<Term>(terms, getTermName)

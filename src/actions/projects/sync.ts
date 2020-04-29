@@ -10,6 +10,10 @@ export const sync = async () => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
   const terms: TermBase[] = await inputTerms()
 

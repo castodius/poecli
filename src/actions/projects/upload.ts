@@ -16,6 +16,10 @@ export const upload = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
 
   const unfilteredFiles = readdirSync(process.cwd())
 

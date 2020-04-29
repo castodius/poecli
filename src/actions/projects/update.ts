@@ -17,6 +17,10 @@ export const update = async () => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
   const completeProject = await poe.viewProject({ id: project.id })
 
   const result: PromptResult = await inquirer.prompt([

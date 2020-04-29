@@ -16,6 +16,10 @@ export const remove = async (): Promise<void> => {
   const poe = new POEditor()
 
   const project = await selectProject(poe)
+  if (!project) {
+    log.info('You have no available projects')
+    return
+  }
   const contributors: Contributor[] = await poe.listContributors({ id: project.id })
 
   if (!contributors.length) {
