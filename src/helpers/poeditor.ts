@@ -12,8 +12,12 @@ inquirer.registerPrompt('checkbox-plus', checkbox)
  * @param poe
  * POEditor instance
  */
-export const selectProject = async (poe: POEditor): Promise<CompactProject> => {
+export const selectProject = async (poe: POEditor): Promise<CompactProject | undefined> => {
   const projects = await poe.listProjects()
+
+  if (!projects.length) {
+    return
+  }
 
   const choices = mapToChoices<CompactProject>(projects, getCompactProjectName)
   const { project }: { project: CompactProject } = await inquirer.prompt([
@@ -42,7 +46,7 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)
-  const { language }: {language: Language} = await inquirer.prompt([
+  const { language }: { language: Language } = await inquirer.prompt([
     {
       name: 'language',
       type: 'list',
@@ -86,7 +90,7 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)
-  const { language }: {language: ProjectLanguage} = await inquirer.prompt([
+  const { language }: { language: ProjectLanguage } = await inquirer.prompt([
     {
       name: 'language',
       type: 'list',
