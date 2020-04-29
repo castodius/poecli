@@ -1,3 +1,6 @@
+// istanbul ignore file
+// ignoring for now
+
 import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { homedir } from 'os'
 

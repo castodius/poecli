@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { getValueAsString, write } from '@helpers/storage'
 
 // models

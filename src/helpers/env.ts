@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { Variables } from '@models/env'
 
 /**
