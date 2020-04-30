@@ -39,10 +39,14 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject | und
  * @param exclude
  * List of languages to exclude. Optional.
  */
-export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language> => {
+export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language | undefined> => {
   let languages = await poe.getAvailableLanguages()
   if (exclude) {
     languages = filterLanguages(languages, exclude)
+  }
+
+  if (!languages.length) {
+    return
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)

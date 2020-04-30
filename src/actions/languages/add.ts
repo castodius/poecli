@@ -16,6 +16,10 @@ export const add = async (): Promise<void> => {
   }
   const exclude = await poe.getProjectLanguages({ id: project.id })
   const language = await selectLanguage(poe, exclude)
+  if (!language) {
+    log.info('This project has no languages')
+    return
+  }
 
   await poe.addLanguage({ id: project.id, language: language.code })
 
