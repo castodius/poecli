@@ -35,3 +35,24 @@ export const mapToChoices = <T>(items: T[], nameMapper: (item: T) => string): Ch
     }
   })
 }
+
+/**
+ * Generic choice selector
+ * @param choices
+ * A list of choices
+ * @param message
+ * Message to display
+ */
+// istanbul ignore next
+export const selectX = async <T>(choices: Choice<T>[], message: string): Promise<T> => {
+  const { choice }: {choice: T} = await prompt([
+    {
+      name: 'choice',
+      type: 'list',
+      message,
+      choices
+    }
+  ])
+
+  return choice
+}

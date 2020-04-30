@@ -4,7 +4,7 @@ import * as checkbox from 'inquirer-checkbox-plus-prompt'
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, Choice, selectX } from '@helpers/prompt'
 inquirer.registerPrompt('checkbox-plus', checkbox)
 
 /**
@@ -20,16 +20,8 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject | und
   }
 
   const choices = mapToChoices<CompactProject>(projects, getCompactProjectName)
-  const { project }: { project: CompactProject } = await inquirer.prompt([
-    {
-      name: 'project',
-      type: 'list',
-      message: 'Select project:',
-      choices
-    }
-  ])
 
-  return project
+  return selectX<CompactProject>(choices, 'Select project')
 }
 
 /**
@@ -50,16 +42,7 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)
-  const { language }: { language: Language } = await inquirer.prompt([
-    {
-      name: 'language',
-      type: 'list',
-      message: 'Select language:',
-      choices
-    }
-  ])
-
-  return language
+  return selectX<Language>(choices, 'Select language')
 }
 
 /**
@@ -94,16 +77,7 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
   }
 
   const choices = mapToChoices<ProjectLanguage>(languages, getLanguageName)
-  const { language }: { language: ProjectLanguage } = await inquirer.prompt([
-    {
-      name: 'language',
-      type: 'list',
-      message: 'Select language:',
-      choices
-    }
-  ])
-
-  return language
+  return selectX<ProjectLanguage>(choices, 'Select language')
 }
 
 /**
