@@ -93,7 +93,7 @@ export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<
     return
   }
 
-  const choices = mapToChoices<Language>(languages, getLanguageName)
+  const choices = mapToChoices<ProjectLanguage>(languages, getLanguageName)
   const { language }: { language: ProjectLanguage } = await inquirer.prompt([
     {
       name: 'language',
