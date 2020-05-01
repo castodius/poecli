@@ -1,13 +1,10 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage, getTermName } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
 import inquirer from 'inquirer'
-import * as autocomplete from 'inquirer-autocomplete-prompt'
 import { Term, LanguageUpdateObject, TranslationContent } from '@models/poeditor'
-import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
-
-inquirer.registerPrompt('autocomplete', autocomplete)
+import { getConfirmation, mapToChoices, selectAutoX } from '@helpers/prompt'
 
 /**
  * Updates translations for a project+language
@@ -35,20 +32,7 @@ export const update = async (): Promise<void> => {
   const terms: LanguageUpdateObject[] = []
 
   while (true) {
-    const { chosenTerm }: { chosenTerm: Term } = await inquirer.prompt([{
-      name: 'chosenTerm',
-      type: 'autocomplete',
-      message: 'Select term+context',
-      source: async (_: string, input: string) => {
-        if (!input) {
-          return choices
-        }
-        return choices.filter((choice: Choice<Term>): boolean => {
-          return choice.name.includes(input)
-        })
-      }
-    }])
-
+    const chosenTerm: Term = await selectAutoX<Term>('Select term+context', buildTermSourceFunction(choices))
     const translatedTerm: LanguageUpdateObject = {
       term: chosenTerm.term,
       context: chosenTerm.context,

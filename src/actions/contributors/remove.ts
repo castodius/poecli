@@ -1,8 +1,8 @@
 import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
-import { selectProject, getContributorName } from '@helpers/poeditor'
-import { getConfirmation, mapToChoices, Choice, selectAutoX } from '@helpers/prompt'
+import { selectProject, getContributorName, buildContributorSourceFunction } from '@helpers/poeditor'
+import { getConfirmation, mapToChoices, selectAutoX } from '@helpers/prompt'
 import inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 inquirer.registerPrompt('checkbox-plus', checkbox)
@@ -57,22 +57,6 @@ export const remove = async (): Promise<void> => {
       await poe.removeContributor(params)
       log.info(`${contributor.email} removed from ${languages[i]}`)
     }
-  }
-}
-
-/**
- * Creates an inquirer autocomplete source function
- * @param choices
- * Choices to be used in function
- */
-export const buildContributorSourceFunction = (choices: Choice<Contributor>[]): (_ : string, input: string) => Promise<Choice<Contributor>[]> => {
-  return async (_: string, input: string): Promise<Choice<Contributor>[]> => {
-    if (!input) {
-      return choices
-    }
-    return choices.filter((choice: Choice<Contributor>): boolean => {
-      return choice.name.includes(input)
-    })
   }
 }
 

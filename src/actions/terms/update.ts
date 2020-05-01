@@ -1,12 +1,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, validateTerm, inputTags, getTermName } from '@helpers/poeditor'
+import { selectProject, validateTerm, inputTags, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
-import * as autocomplete from 'inquirer-autocomplete-prompt'
-import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
-
-inquirer.registerPrompt('autocomplete', autocomplete)
+import { getConfirmation, mapToChoices, selectAutoX } from '@helpers/prompt'
 
 /**
  * Updates terms
@@ -26,19 +23,7 @@ export const update = async (): Promise<void> => {
   const updatedTerms: UpdateTerm[] = []
 
   while (true) {
-    const { term }: {term: Term} = await inquirer.prompt([{
-      name: 'term',
-      type: 'autocomplete',
-      message: 'Select term+context',
-      source: async (_: string, input: string) => {
-        if (!input) {
-          return choices
-        }
-        return choices.filter((choice: Choice<Term>): boolean => {
-          return choice.name.includes(input)
-        })
-      }
-    }])
+    const term: Term = await selectAutoX<Term>('Select term+context', buildTermSourceFunction(choices))
 
     // interface below is a lie, missing term and context
     const updatedTerm: UpdateTerm = await inquirer.prompt([
