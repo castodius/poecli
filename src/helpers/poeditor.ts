@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer'
 
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
 import { getConfirmation, mapToChoices, Choice, selectX, selectCheckboxPlus } from '@helpers/prompt'
 
@@ -272,4 +272,21 @@ export const buildTermSourceFunction = (choices: Choice<Term>[]): (_ : string, i
       return choice.name.includes(input)
     })
   }
+}
+
+const exportFilters = Object.values(ExportFilter)
+/**
+ * Filter function for inquirer
+ * @param _
+ * Irrelevant
+ * @param input
+ * Input to filter
+ */
+export const exportFiltersSource = async (_: string, input: string): Promise<string[]> => {
+  if (!input) {
+    return exportFilters
+  }
+  return exportFilters.filter((value: string) => {
+    return value.includes(input)
+  })
 }
