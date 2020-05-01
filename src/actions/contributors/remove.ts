@@ -60,6 +60,11 @@ export const remove = async (): Promise<void> => {
   }
 }
 
+/**
+ * Creates an inquirer autocomplete source function
+ * @param choices
+ * Choices to be used in function
+ */
 export const buildContributorSourceFunction = (choices: Choice<Contributor>[]): (_ : string, input: string) => Promise<Choice<Contributor>[]> => {
   return async (_: string, input: string): Promise<Choice<Contributor>[]> => {
     if (!input) {
