@@ -68,8 +68,8 @@ export const selectX = async <T>(choices: Choice<T>[], message: string): Promise
  * @param sourceFunction
  * Source function used when getting options
  */
-export const selectAuto = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
-  return selectAdvanced('autocomplete', message, sourceFunction)
+export const selectAuto = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[] | T[]>): Promise<T> => {
+  return selectAdvanced<T, T>('autocomplete', message, sourceFunction)
 }
 
 /**
@@ -79,8 +79,8 @@ export const selectAuto = async<T>(message: string, sourceFunction: (_: string, 
  * @param sourceFunction
  * Source function used when getting options
  */
-export const selectCheckboxPlus = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
-  return selectAdvanced('checkbox-plus', message, sourceFunction)
+export const selectCheckboxPlus = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[] | T[]>): Promise<T[]> => {
+  return selectAdvanced<T, T[]>('checkbox-plus', message, sourceFunction)
 }
 
 /**
@@ -92,8 +92,8 @@ export const selectCheckboxPlus = async<T>(message: string, sourceFunction: (_: 
  * @param sourceFunction
  * Source function used when getting options
  */
-export const selectAdvanced = async<T>(type: string, message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
-  const { choice }: { choice: T } = await inquirer.prompt([
+export const selectAdvanced = async<T, U>(type: string, message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[] | T[]>): Promise<U> => {
+  const { choice }: { choice: U } = await inquirer.prompt([
     {
       name: 'choice',
       type,
@@ -103,4 +103,20 @@ export const selectAdvanced = async<T>(type: string, message: string, sourceFunc
   ])
 
   return choice
+}
+
+/**
+ * Builds a source function for inquirer for an array of strings
+ * @param choices
+ * Array of strings
+ */
+export const buildStringSourceFunction = (choices: string[]): (_: string, input: string) => Promise<string[]> => {
+  return async (_: string, input: string): Promise<string[]> => {
+    if (!input) {
+      return choices
+    }
+    return choices.filter((choice: string): boolean => {
+      return choice.includes(input)
+    })
+  }
 }
