@@ -68,11 +68,35 @@ export const selectX = async <T>(choices: Choice<T>[], message: string): Promise
  * @param sourceFunction
  * Source function used when getting options
  */
-export const selectAutoX = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
+export const selectAuto = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
+  return selectAdvanced('autocomplete', message, sourceFunction)
+}
+
+/**
+ * Generic checkbox-plus selector
+ * @param message
+ * Message to display
+ * @param sourceFunction
+ * Source function used when getting options
+ */
+export const selectCheckboxPlus = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
+  return selectAdvanced('checkbox-plus', message, sourceFunction)
+}
+
+/**
+ * Generic function for advanced prompt functions
+ * @param type
+ * Inquirer prompt type. Autocomplete, checkbox-plus etc
+ * @param message
+ * Message to display
+ * @param sourceFunction
+ * Source function used when getting options
+ */
+export const selectAdvanced = async<T>(type: string, message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
   const { choice }: { choice: T } = await inquirer.prompt([
     {
       name: 'choice',
-      type: 'autocomplete',
+      type,
       message,
       source: sourceFunction
     }

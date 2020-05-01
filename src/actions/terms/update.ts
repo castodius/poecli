@@ -3,7 +3,7 @@ import * as log from '@lib/log'
 import { selectProject, validateTerm, inputTags, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import inquirer from 'inquirer'
-import { getConfirmation, mapToChoices, selectAutoX } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectAuto } from '@helpers/prompt'
 
 /**
  * Updates terms
@@ -23,7 +23,7 @@ export const update = async (): Promise<void> => {
   const updatedTerms: UpdateTerm[] = []
 
   while (true) {
-    const term: Term = await selectAutoX<Term>('Select term+context', buildTermSourceFunction(choices))
+    const term: Term = await selectAuto<Term>('Select term+context', buildTermSourceFunction(choices))
 
     // interface below is a lie, missing term and context
     const updatedTerm: UpdateTerm = await inquirer.prompt([

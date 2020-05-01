@@ -2,7 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, getContributorName, buildContributorSourceFunction } from '@helpers/poeditor'
-import { getConfirmation, mapToChoices, selectAutoX } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectAuto } from '@helpers/prompt'
 import inquirer from 'inquirer'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
 inquirer.registerPrompt('checkbox-plus', checkbox)
@@ -26,7 +26,7 @@ export const remove = async (): Promise<void> => {
   }
 
   const choices = mapToChoices<Contributor>(contributors, getContributorName)
-  const contributor: Contributor = await selectAutoX<Contributor>('Select contributor', buildContributorSourceFunction(choices))
+  const contributor: Contributor = await selectAuto<Contributor>('Select contributor', buildContributorSourceFunction(choices))
 
   const projectPermissions = getProjectPermissions(contributor, project.id)
   if (!projectPermissions) {
