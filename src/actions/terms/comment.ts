@@ -18,7 +18,7 @@ export const comment = async (): Promise<void> => {
 
   const terms: Term[] = await multiSelectTerms(poe, project.id)
   if (!terms.length) {
-    log.info('The select project has no terms')
+    log.info('The selected project has no terms')
     return
   }
 
