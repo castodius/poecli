@@ -1,4 +1,8 @@
-import { prompt } from 'inquirer'
+import * as inquirer from 'inquirer'
+import * as autocomplete from 'inquirer-autocomplete-prompt'
+import * as checkbox from 'inquirer-checkbox-plus-prompt'
+inquirer.registerPrompt('autocomplete', autocomplete)
+inquirer.registerPrompt('checkbox-plus', checkbox)
 
 /**
  * Forces the user to confirm whether or not they want to do to something
@@ -6,7 +10,7 @@ import { prompt } from 'inquirer'
  * Message to display to user. Should be a question.
  */
 export const getConfirmation = async (message: string): Promise<boolean> => {
-  const { confirm }: { confirm: boolean } = await prompt([{
+  const { confirm }: { confirm: boolean } = await inquirer.prompt([{
     name: 'confirm',
     type: 'confirm',
     message
@@ -45,12 +49,32 @@ export const mapToChoices = <T>(items: T[], nameMapper: (item: T) => string): Ch
  */
 // istanbul ignore next
 export const selectX = async <T>(choices: Choice<T>[], message: string): Promise<T> => {
-  const { choice }: {choice: T} = await prompt([
+  const { choice }: { choice: T } = await inquirer.prompt([
     {
       name: 'choice',
       type: 'list',
       message,
       choices
+    }
+  ])
+
+  return choice
+}
+
+/**
+ * Generic autocomplete selector
+ * @param message
+ * Message to display
+ * @param sourceFunction
+ * Source function used when getting options
+ */
+export const selectAutoX = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[]>) => {
+  const { choice }: { choice: T } = await inquirer.prompt([
+    {
+      name: 'choice',
+      type: 'autocomplete',
+      message,
+      source: sourceFunction
     }
   ])
 
