@@ -2,11 +2,9 @@ import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, getContributorName } from '@helpers/poeditor'
-import { getConfirmation, mapToChoices, Choice } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, Choice, selectAutoX } from '@helpers/prompt'
 import inquirer from 'inquirer'
-import * as autocomplete from 'inquirer-autocomplete-prompt'
 import * as checkbox from 'inquirer-checkbox-plus-prompt'
-inquirer.registerPrompt('autocomplete', autocomplete)
 inquirer.registerPrompt('checkbox-plus', checkbox)
 
 /**
@@ -28,22 +26,7 @@ export const remove = async (): Promise<void> => {
   }
 
   const choices = mapToChoices<Contributor>(contributors, getContributorName)
-
-  const { contributor }: { contributor: Contributor } = await inquirer.prompt([
-    {
-      name: 'contributor',
-      type: 'autocomplete',
-      message: 'Select contributor',
-      source: async (_: string, input: string) => {
-        if (!input) {
-          return choices
-        }
-        return choices.filter((choice: Choice<Contributor>): boolean => {
-          return choice.name.includes(input)
-        })
-      }
-    }
-  ])
+  const contributor: Contributor = await selectAutoX<Contributor>('Select contributor', buildContributorSourceFunction(choices))
 
   const projectPermissions = getProjectPermissions(contributor, project.id)
   if (!projectPermissions) {
@@ -74,6 +57,17 @@ export const remove = async (): Promise<void> => {
       await poe.removeContributor(params)
       log.info(`${contributor.email} removed from ${languages[i]}`)
     }
+  }
+}
+
+export const buildContributorSourceFunction = (choices: Choice<Contributor>[]): (_ : string, input: string) => Promise<Choice<Contributor>[]> => {
+  return async (_: string, input: string): Promise<Choice<Contributor>[]> => {
+    if (!input) {
+      return choices
+    }
+    return choices.filter((choice: Choice<Contributor>): boolean => {
+      return choice.name.includes(input)
+    })
   }
 }
 
