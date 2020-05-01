@@ -2,10 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, getContributorName, buildContributorSourceFunction } from '@helpers/poeditor'
-import { getConfirmation, mapToChoices, selectAuto } from '@helpers/prompt'
-import inquirer from 'inquirer'
-import * as checkbox from 'inquirer-checkbox-plus-prompt'
-inquirer.registerPrompt('checkbox-plus', checkbox)
+import { getConfirmation, mapToChoices, selectAuto, selectCheckboxPlus, buildStringSourceFunction } from '@helpers/prompt'
 
 /**
  * Removes one or more contributors from a project
@@ -79,22 +76,5 @@ export const getProjectPermissions = (contributor: Contributor, id: number): Adm
  * Array of languages. For example ['sv', 'en']
  */
 export const selectLanguages = async (languages: string[]): Promise<string[]> => {
-  const { chosenLanguages }: { chosenLanguages: string[] } = await inquirer.prompt([
-    {
-      name: 'chosenLanguages',
-      type: 'checkbox-plus',
-      message: 'Select languages to remove. Select all to remove contributor from project',
-      source: async (_: string, input: string): Promise<string[]> => {
-        if (!input) {
-          return languages
-        }
-
-        return languages.filter((language: string): boolean => {
-          return language.includes(input)
-        })
-      }
-    }
-  ])
-
-  return chosenLanguages
+  return selectCheckboxPlus('Select languages to remove. Select all to remove contributor from project', buildStringSourceFunction(languages))
 }
