@@ -2,10 +2,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
-import inquirer from 'inquirer'
 import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject } from '@models/poeditor'
 import { readdirSync } from 'fs'
-import { getConfirmation } from '@helpers/prompt'
+import { getConfirmation, selectAuto, buildStringSourceFunction, selectCheckboxPlus, Choice, buildChoiceSourceFunction } from '@helpers/prompt'
 
 type POBooleanUndefined = POBoolean | undefined
 
@@ -36,20 +35,8 @@ export const upload = async (): Promise<void> => {
     return
   }
 
-  const { updating, file }: { updating: UpdateType, file: string } = await inquirer.prompt([
-    {
-      name: 'updating',
-      type: 'list',
-      message: 'Select update type',
-      choices: Object.values(UpdateType)
-    },
-    {
-      name: 'file',
-      type: 'list',
-      message: 'Select a file',
-      choices: files
-    }
-  ])
+  const updating: UpdateType = (await selectAuto('Select update type', buildStringSourceFunction(Object.values(UpdateType)))) as UpdateType
+  const file: string = await selectAuto('Select a file', buildStringSourceFunction(files))
 
   const language: string | undefined = await getLanguage(updating, project.id, poe)
   const overwrite: POBooleanUndefined = await getOverwrite(updating)
@@ -155,7 +142,7 @@ export const getTags = async (updating: UpdateType): Promise<UpdateTagObject | u
     return
   }
 
-  const choices = [{
+  const choices: Choice<UpdateTag>[] = [{
     name: 'All',
     value: UpdateTag.ALL
   }, {
@@ -179,12 +166,7 @@ export const getTags = async (updating: UpdateType): Promise<UpdateTagObject | u
   log.info('You are about to add tags to your terms and translations. This action can be done multiple times')
 
   while (true) {
-    const { updateTags }: {updateTags: UpdateTag[]} = await inquirer.prompt([{
-      name: 'updateTags',
-      type: 'checkbox',
-      message: 'Select term and translations states to apply tags to',
-      choices
-    }])
+    const updateTags: UpdateTag[] = await selectCheckboxPlus('Select terms and translations states to apply tags to', buildChoiceSourceFunction<UpdateTag>(choices))
 
     if (!updateTags.length) {
       break

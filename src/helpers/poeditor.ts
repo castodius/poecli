@@ -1,7 +1,7 @@
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation, mapToChoices, Choice, selectX, selectCheckboxPlus, promptInput } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
 
 /**
  * Forces the user to select a project
@@ -175,7 +175,7 @@ export const multiSelectTerms = async (poe: POEditor, id: number): Promise<Term[
 
   const choices = mapToChoices<Term>(availableTerms, getTermName)
 
-  const terms: Term[] = await selectCheckboxPlus<Term>('Select terms for which you want to add comments', buildTermSourceFunction(choices))
+  const terms: Term[] = await selectCheckboxPlus<Term>('Select terms for which you want to add comments', buildChoiceSourceFunction<Term>(choices))
 
   return terms
 }
@@ -213,38 +213,6 @@ export const getCompactProjectName = (project: CompactProject) => {
  */
 export const getLanguageName = (language: Language) => {
   return `${language.name} - ${language.code}`
-}
-
-/**
- * Creates an inquirer autocomplete source function
- * @param choices
- * Choices to be used in function
- */
-export const buildContributorSourceFunction = (choices: Choice<Contributor>[]): (_ : string, input: string) => Promise<Choice<Contributor>[]> => {
-  return async (_: string, input: string): Promise<Choice<Contributor>[]> => {
-    if (!input) {
-      return choices
-    }
-    return choices.filter((choice: Choice<Contributor>): boolean => {
-      return choice.name.includes(input)
-    })
-  }
-}
-
-/**
- * Creates an inquirer autocomplete source function
- * @param choices
- * Choices to be used in function
- */
-export const buildTermSourceFunction = (choices: Choice<Term>[]): (_ : string, input: string) => Promise<Choice<Term>[]> => {
-  return async (_: string, input: string): Promise<Choice<Term>[]> => {
-    if (!input) {
-      return choices
-    }
-    return choices.filter((choice: Choice<Term>): boolean => {
-      return choice.name.includes(input)
-    })
-  }
 }
 
 const exportFilters = Object.values(ExportFilter)

@@ -1,9 +1,9 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, getTermName } from '@helpers/poeditor'
 import { Term, LanguageUpdateObject, TranslationContent } from '@models/poeditor'
-import { getConfirmation, mapToChoices, selectAuto, promptInput } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectAuto, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
 
 /**
  * Updates translations for a project+language
@@ -31,7 +31,7 @@ export const update = async (): Promise<void> => {
   const terms: LanguageUpdateObject[] = []
 
   while (true) {
-    const chosenTerm: Term = await selectAuto<Term>('Select term+context', buildTermSourceFunction(choices))
+    const chosenTerm: Term = await selectAuto<Term>('Select term+context', buildChoiceSourceFunction<Term>(choices))
     const translatedTerm: LanguageUpdateObject = {
       term: chosenTerm.term,
       context: chosenTerm.context,

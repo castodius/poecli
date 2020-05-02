@@ -1,8 +1,8 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
+import { selectProject, getTermName } from '@helpers/poeditor'
 import { Term, DeleteTerm } from '@models/poeditor'
-import { mapToChoices, selectCheckboxPlus } from '@helpers/prompt'
+import { mapToChoices, selectCheckboxPlus, buildChoiceSourceFunction } from '@helpers/prompt'
 
 export const deleteTerms = async (): Promise<void> => {
   const poe = new POEditor()
@@ -16,7 +16,7 @@ export const deleteTerms = async (): Promise<void> => {
   const terms: Term[] = await poe.listTerms({ id: project.id })
   const choices = mapToChoices<Term>(terms, getTermName)
 
-  const toDelete: Term[] = await selectCheckboxPlus('Select terms to delete', buildTermSourceFunction(choices))
+  const toDelete: Term[] = await selectCheckboxPlus('Select terms to delete', buildChoiceSourceFunction<Term>(choices))
 
   const data = await poe.deleteTerms({ id: project.id, terms: mapChoiceToDeleteTerm(toDelete) })
 

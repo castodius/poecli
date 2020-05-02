@@ -1,8 +1,8 @@
 import { POEditor } from '@lib/poeditor'
 import { Contributor, AdminContributorPermissions, ContributorPermissions, ContributorType, RemoveContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
-import { selectProject, getContributorName, buildContributorSourceFunction } from '@helpers/poeditor'
-import { getConfirmation, mapToChoices, selectAuto, selectCheckboxPlus, buildStringSourceFunction } from '@helpers/prompt'
+import { selectProject, getContributorName } from '@helpers/poeditor'
+import { getConfirmation, mapToChoices, selectAuto, selectCheckboxPlus, buildStringSourceFunction, buildChoiceSourceFunction } from '@helpers/prompt'
 
 /**
  * Removes one or more contributors from a project
@@ -23,7 +23,7 @@ export const remove = async (): Promise<void> => {
   }
 
   const choices = mapToChoices<Contributor>(contributors, getContributorName)
-  const contributor: Contributor = await selectAuto<Contributor>('Select contributor', buildContributorSourceFunction(choices))
+  const contributor: Contributor = await selectAuto<Contributor>('Select contributor', buildChoiceSourceFunction<Contributor>(choices))
 
   const projectPermissions = getProjectPermissions(contributor, project.id)
   if (!projectPermissions) {

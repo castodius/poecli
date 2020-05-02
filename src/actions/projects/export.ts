@@ -1,9 +1,8 @@
-import * as inquirer from 'inquirer'
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage, inputTags, exportFiltersSource } from '@helpers/poeditor'
 import { FileType, ExportFilter } from '@models/poeditor'
-import { getConfirmation, selectCheckboxPlus } from '@helpers/prompt'
+import { getConfirmation, selectCheckboxPlus, selectAuto, buildStringSourceFunction } from '@helpers/prompt'
 
 /**
  * Exports project data
@@ -23,14 +22,7 @@ export const exportProject = async (): Promise<void> => {
     return
   }
 
-  const { type }: {type: FileType} = await inquirer.prompt([
-    {
-      name: 'type',
-      type: 'list',
-      message: 'Select output format',
-      choices: Object.values(FileType)
-    }
-  ])
+  const type: string = await selectAuto('Select output format', buildStringSourceFunction(Object.values(FileType)))
   const filters: string[] = await selectCheckboxPlus<string>('Select filters (optional', exportFiltersSource)
 
   const tags: string[] = await inputTags()
@@ -40,7 +32,7 @@ export const exportProject = async (): Promise<void> => {
   const url = await poe.exportProject({
     id: project.id,
     language: language.code,
-    type,
+    type: type as FileType,
     filters: filters as ExportFilter[], // hard to get this right without casting
     tags,
     order: order ? 'terms' : ''
