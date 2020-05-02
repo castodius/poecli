@@ -2,8 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, validateTerm, inputTags, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
-import inquirer from 'inquirer'
-import { getConfirmation, mapToChoices, selectAuto } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectAuto, promptInput } from '@helpers/prompt'
 
 /**
  * Updates terms
@@ -25,40 +24,22 @@ export const update = async (): Promise<void> => {
   while (true) {
     const term: Term = await selectAuto<Term>('Select term+context', buildTermSourceFunction(choices))
 
-    // interface below is a lie, missing term and context
-    const updatedTerm: UpdateTerm = await inquirer.prompt([
-      {
-        name: 'new_term',
-        type: 'input',
-        message: 'Input new term',
-        default: term.term,
-        validate: validateTerm
-      },
-      {
-        name: 'new_context',
-        type: 'input',
-        message: 'Input new context (optional)',
-        default: term.context
-      },
-      {
-        name: 'reference',
-        type: 'input',
-        message: 'Input reference (optional)',
-        default: term.reference
-      },
-      {
-        name: 'plural',
-        type: 'input',
-        message: 'Input plural (optional)',
-        default: term.plural
-      }
-    ])
+    const newTerm = await promptInput('Input new term', term.term, validateTerm)
+    const newContext = await promptInput('Input new context (optional)', term.context)
+    const reference = await promptInput('Input reference (optional)', term.reference)
+    const plural = await promptInput('Input plural (optional)', term.plural)
 
     const tags = await inputTags()
 
-    updatedTerm.term = term.term
-    updatedTerm.context = term.context
-    updatedTerm.tags = tags
+    const updatedTerm: UpdateTerm = {
+      new_term: newTerm,
+      new_context: newContext,
+      reference,
+      plural,
+      term: term.term,
+      context: term.context,
+      tags
+    }
     updatedTerms.push(updatedTerm)
 
     if (!(await getConfirmation('Do you want to update another term?'))) {

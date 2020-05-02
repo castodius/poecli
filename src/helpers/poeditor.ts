@@ -1,5 +1,3 @@
-import * as inquirer from 'inquirer'
-
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
