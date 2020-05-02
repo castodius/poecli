@@ -139,3 +139,19 @@ export const buildStringSourceFunction = (choices: string[]): (_: string, input:
     })
   }
 }
+
+/**
+ * Generic source function builder for Choice<T>
+ * @param choices
+ * Array of Choice<T>
+ */
+export const buildChoiceSourceFunction = <T>(choices: Choice<T>[]): (_: string, input: string) => Promise<Choice<T>[]> => {
+  return async (_: string, input: string): Promise<Choice<T>[]> => {
+    if (!input) {
+      return choices
+    }
+    return choices.filter((choice: Choice<T>): boolean => {
+      return choice.name.includes(input)
+    })
+  }
+}
