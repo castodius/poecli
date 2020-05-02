@@ -1,14 +1,7 @@
-import * as inquirer from 'inquirer'
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject } from '@helpers/poeditor'
-
-interface PromptResult {
-  name: string;
-  description: string;
-  // eslint-disable-next-line camelcase
-  reference_language: string;
-}
+import { promptInput } from '@helpers/prompt'
 
 /**
  * Updates project information
@@ -23,28 +16,11 @@ export const update = async () => {
   }
   const completeProject = await poe.viewProject({ id: project.id })
 
-  const result: PromptResult = await inquirer.prompt([
-    {
-      name: 'name',
-      type: 'input',
-      message: 'Input new project name (optional)',
-      default: completeProject.name
-    },
-    {
-      name: 'description',
-      type: 'input',
-      message: 'Input new project description (optional)',
-      default: completeProject.description
-    },
-    {
-      name: 'reference_language',
-      type: 'input',
-      message: 'Input new reference language (optional)',
-      default: completeProject.reference_language || ''
-    }
-  ])
+  const name: string = await promptInput('Input new project name (optional)', completeProject.name)
+  const description: string = await promptInput('Input new project name (optional)', completeProject.name)
+  const referenceLanguage: string = await promptInput('Input new project name (optional)', completeProject.name)
 
-  const data = await poe.updateProject({ id: project.id, ...result })
+  const data = await poe.updateProject({ id: project.id, name, description, reference_language: referenceLanguage })
   log.info('Project successfully updated')
   log.info(JSON.stringify(data))
 }

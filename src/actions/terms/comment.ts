@@ -2,7 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, multiSelectTerms } from '@helpers/poeditor'
 import { Term, AddTermComment } from '@models/poeditor'
-import inquirer from 'inquirer'
+import { promptInput } from '@helpers/prompt'
 
 /**
  * Adds comments to terms
@@ -25,14 +25,7 @@ export const comment = async (): Promise<void> => {
   const termsWithComments: AddTermComment[] = []
   for (let i = 0; i < terms.length; i++) {
     const term: Term = terms[i]
-    const { comment }: {comment: string} = await inquirer.prompt([
-      {
-        name: 'comment',
-        type: 'input',
-        message: `Add a comment to "${term.term} ${term.context}" (optional)`
-      }
-    ])
-
+    const comment: string = await promptInput(`Add a comment to "${term.term} ${term.context}" (optional)`)
     if (!comment) {
       log.info('Ignoring empty comment')
       continue
