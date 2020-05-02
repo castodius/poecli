@@ -3,7 +3,7 @@ import * as inquirer from 'inquirer'
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation, mapToChoices, Choice, selectX, selectCheckboxPlus } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, Choice, selectX, selectCheckboxPlus, promptInput } from '@helpers/prompt'
 
 /**
  * Forces the user to select a project
@@ -86,39 +86,20 @@ export const inputTerms = async (): Promise<TermBase[]> => {
   const terms: TermBase[] = []
 
   while (true) {
-    const partialTerm: TermBase = await inquirer.prompt([
-      {
-        name: 'term',
-        type: 'input',
-        message: 'Input term',
-        validate: validateTerm
-      },
-      {
-        name: 'context',
-        type: 'input',
-        message: 'Input context (optional)'
-      },
-      {
-        name: 'comment',
-        type: 'input',
-        message: 'Input comment (optional)'
-      },
-      {
-        name: 'reference',
-        type: 'input',
-        message: 'Input reference (optional)'
-      },
-      {
-        name: 'plural',
-        type: 'input',
-        message: 'Input plural (optional)'
-      }
-    ])
+    const termText = await promptInput('Input term', '', validateTerm)
+    const context = await promptInput('Input context (optional)', '', validateTerm)
+    const comment = await promptInput('Input comment (optional)', '', validateTerm)
+    const reference = await promptInput('Input reference (optional)', '', validateTerm)
+    const plural = await promptInput('Input plural (optional)', '', validateTerm)
 
     const tags = await inputTags()
 
     const term: TermBase = {
-      ...partialTerm,
+      term: termText,
+      context,
+      comment,
+      reference,
+      plural,
       tags
     }
     terms.push(term)
@@ -150,21 +131,15 @@ export const validateTerm = (value: string) => {
  */
 export const inputTags = async (): Promise<string[]> => {
   const tags: string[] = []
-  let tag: string = 'something'
-  while (tag) {
-    const { newTag }: { newTag: string } = await inquirer.prompt([
-      {
-        name: 'newTag',
-        type: 'input',
-        message: 'Input tag(s). Enter an empty string to continue with the next step',
-        validate: validateTag
-      }
-    ])
+  while (true) {
+    const tag = await promptInput('Input tag(s). Enter an empty string to continue with the next step', '', validateTag)
 
-    if (newTag) {
-      tags.push(newTag)
+    if (!tag) {
+      break
     }
-    tag = newTag
+    if (tag) {
+      tags.push(tag)
+    }
   }
 
   return tags

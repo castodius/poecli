@@ -110,13 +110,14 @@ export const selectAdvanced = async<T, U>(type: string, message: string, sourceF
  * @param message
  * Message to display
  */
-export const promptInput = async (message: string, defaultValue: string = ''): Promise<string> => {
+export const promptInput = async (message: string, defaultValue: string = '', validate?: (value: string) => boolean | string): Promise<string> => {
   const { choice }: { choice: string } = await inquirer.prompt([
     {
       name: 'choice',
       type: 'input',
       message,
-      default: defaultValue
+      default: defaultValue,
+      validate
     }
   ])
 
