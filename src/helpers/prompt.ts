@@ -106,6 +106,24 @@ export const selectAdvanced = async<T, U>(type: string, message: string, sourceF
 }
 
 /**
+ * Prompts the user for input
+ * @param message
+ * Message to display
+ */
+export const promptInput = async (message: string, defaultValue: string = ''): Promise<string> => {
+  const { choice }: { choice: string } = await inquirer.prompt([
+    {
+      name: 'choice',
+      type: 'input',
+      message,
+      default: defaultValue
+    }
+  ])
+
+  return choice
+}
+
+/**
  * Builds a source function for inquirer for an array of strings
  * @param choices
  * Array of strings
