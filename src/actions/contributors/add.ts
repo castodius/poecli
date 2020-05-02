@@ -2,8 +2,7 @@ import { POEditor } from '@lib/poeditor'
 import { AddContributorRequest } from '@models/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
-import { getConfirmation } from '@helpers/prompt'
-import inquirer from 'inquirer'
+import { getConfirmation, promptInput } from '@helpers/prompt'
 
 /**
  * Adds a contributor to a project
@@ -17,18 +16,8 @@ export const add = async (): Promise<void> => {
     return
   }
 
-  const { name, email }: {name: string, email: string} = await inquirer.prompt([
-    {
-      name: 'name',
-      type: 'input',
-      message: 'Please input contributor name'
-    },
-    {
-      name: 'email',
-      type: 'input',
-      message: 'Please input contributor email'
-    }
-  ])
+  const name: string = await promptInput('Please input contributor name')
+  const email: string = await promptInput('Please input contributor email')
 
   const params: AddContributorRequest = {
     id: project.id,

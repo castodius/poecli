@@ -2,9 +2,8 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage, getTermName, buildTermSourceFunction } from '@helpers/poeditor'
-import inquirer from 'inquirer'
 import { Term, LanguageUpdateObject, TranslationContent } from '@models/poeditor'
-import { getConfirmation, mapToChoices, selectAuto } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectAuto, promptInput } from '@helpers/prompt'
 
 /**
  * Updates translations for a project+language
@@ -67,29 +66,11 @@ export const update = async (): Promise<void> => {
 export const getContent = async (term: Term): Promise<TranslationContent> => {
   const termContent: TranslationContent = term.translation.content
   if (typeof termContent === 'string') {
-    return getTranslation('Input translation for term', termContent)
+    return promptInput('Input translation for term', termContent)
   }
 
   return {
-    one: await getTranslation('Input translation for term', termContent.one),
-    other: await getTranslation('Input translation for plural', termContent.other)
+    one: await promptInput('Input translation for term', termContent.one),
+    other: await promptInput('Input translation for plural', termContent.other)
   }
-}
-
-/**
- * Forces the user to translations a term
- * @param message
- * Message to display to the user
- * @param defaultValue
- * Value to display as default, making it easier for the user to not overwrite valid values
- */
-export const getTranslation = async (message: string, defaultValue?: string): Promise<string> => {
-  const { translation }: { translation: string } = await inquirer.prompt([{
-    name: 'translation',
-    type: 'input',
-    message,
-    default: defaultValue
-  }])
-
-  return translation
 }
