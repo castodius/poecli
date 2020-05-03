@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 /**
  * Prints information to the terminal
  * @param message
