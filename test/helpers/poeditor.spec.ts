@@ -6,7 +6,7 @@ import * as prompt from '@helpers/prompt'
 
 // tools
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage, TermBase } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
 
 // tools
 import { checkAllMocksCalled } from '@test/tools'
@@ -337,6 +337,123 @@ describe('poeditor', () => {
 
         expect(typeof output).toEqual('string')
       })
+    })
+  })
+
+  describe('multiSelectTerms', () => {
+    const terms: Term[] = [{
+      created: '',
+      updated: '',
+      translation: {
+        content: '',
+        fuzzy: 0,
+        proofread: 0,
+        updated: ''
+      },
+      term: 'term',
+      context: 'context'
+    }]
+    it('should be able to select terms', async () => {
+      const poe = new POEditor('abc')
+      const mocks = [
+        jest.spyOn(poe, 'listTerms').mockResolvedValue(terms),
+        mocked(prompt).selectCheckboxPlus.mockResolvedValue(terms)
+      ]
+
+      const output = await poeditorHelper.multiSelectTerms(poe, 123456)
+
+      expect(output).toEqual(terms)
+      checkAllMocksCalled(mocks, 1)
+    })
+
+    it('should return nothing if the project has no terms', async () => {
+      const poe = new POEditor('abc')
+      const mocks = [
+        jest.spyOn(poe, 'listTerms').mockResolvedValue([])
+      ]
+      const uncalledMocks = [
+        mocked(prompt).selectCheckboxPlus.mockResolvedValue(terms)
+      ]
+
+      const output = await poeditorHelper.multiSelectTerms(poe, 123456)
+
+      expect(output).toEqual([])
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled(uncalledMocks, 0)
+    })
+  })
+
+  describe('getContributorName', () => {
+    it('should return name+email', () => {
+      const contributor: Contributor = {
+        name: 'Testman',
+        email: 'testman@testgroup.com',
+        permissions: []
+      }
+
+      const output = poeditorHelper.getContributorName(contributor)
+
+      expect(output).toEqual('Testman testman@testgroup.com')
+    })
+  })
+
+  describe('getTermName', () => {
+    const getTerm = (): Term => {
+      return {
+        term: 'Some term',
+        context: 'Much context',
+        created: '',
+        updated: '',
+        translation: {
+          updated: '',
+          fuzzy: 0,
+          proofread: 0,
+          content: ''
+        }
+      }
+    }
+
+    it('should use term and context if context is defined', () => {
+      const output = poeditorHelper.getTermName(getTerm())
+
+      expect(output).toEqual('Some term Much context')
+    })
+
+    it('should only use term if context is not defined', () => {
+      const term: Term = getTerm()
+      delete term.context
+      const output = poeditorHelper.getTermName(term)
+
+      expect(output).toEqual('Some term')
+    })
+  })
+
+  describe('getCompactProjectName', () => {
+    it('should return name and id', () => {
+      const project: CompactProject = {
+        name: 'My project',
+        id: 123456,
+        public: 0,
+        open: 0,
+        created: 'yes'
+      }
+
+      const output = poeditorHelper.getCompactProjectName(project)
+
+      expect(output).toEqual('My project - 123456')
+    })
+  })
+
+  describe('getLanguageName', () => {
+    it('should return name and code', () => {
+      const language: Language = {
+        name: 'My lang',
+        code: 'ok'
+      }
+
+      const output = poeditorHelper.getLanguageName(language)
+
+      expect(output).toEqual('ok - My lang')
     })
   })
 })

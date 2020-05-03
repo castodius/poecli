@@ -135,9 +135,7 @@ export const inputTags = async (): Promise<string[]> => {
     if (!tag) {
       break
     }
-    if (tag) {
-      tags.push(tag)
-    }
+    tags.push(tag)
   }
 
   return tags
