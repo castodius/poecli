@@ -1,17 +1,24 @@
 // to be tested
 import * as poeditorHelper from '@helpers/poeditor'
 
+// to be mocked
+import * as prompt from '@helpers/prompt'
+
 // tools
-import { stdin, MockSTDIN } from 'mock-stdin'
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage } from '@models/poeditor'
 
 // models
+import { checkAllMocksCalled } from '@test/tools'
+import { mocked } from 'ts-jest/utils'
+
+// mock inits
+jest.mock('@helpers/prompt')
 
 describe('poeditor', () => {
-  let stdinMock: MockSTDIN
   beforeEach(() => {
-    stdinMock = stdin()
+    jest.clearAllMocks()
+    jest.restoreAllMocks()
   })
 
   describe('selectProject', () => {
@@ -25,23 +32,31 @@ describe('poeditor', () => {
 
     it('should be able to select a project', async () => {
       const poe = new POEditor('abc')
-      jest.spyOn(poe, 'listProjects').mockResolvedValue(projects)
+      const mocks = [
+        jest.spyOn(poe, 'listProjects').mockResolvedValue(projects),
+        mocked(prompt).selectX.mockResolvedValue(projects[0])
+      ]
 
-      process.nextTick(() => {
-        stdinMock.send('\r')
-      })
       const output = await poeditorHelper.selectProject(poe)
 
       expect(output).toEqual(projects[0])
+      checkAllMocksCalled(mocks, 1)
     })
 
-    it('should handle no projects being available', async () => {
+    it('should return nothing if no projects were found', async () => {
       const poe = new POEditor('abc')
-      jest.spyOn(poe, 'listProjects').mockResolvedValue([])
+      const mocks = [
+        jest.spyOn(poe, 'listProjects').mockResolvedValue([])
+      ]
+      const uncalledMocks = [
+        mocked(prompt).selectX.mockResolvedValue(projects[0])
+      ]
 
       const output = await poeditorHelper.selectProject(poe)
 
       expect(output).toEqual(undefined)
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled(uncalledMocks, 0)
     })
   })
 
@@ -53,47 +68,49 @@ describe('poeditor', () => {
 
     it('should select a language', async () => {
       const poe = new POEditor('abc')
-      jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages)
-      const excludeSpy = jest.spyOn(poeditorHelper, 'filterLanguages')
+      const mocks = [
+        jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages),
+        mocked(prompt).selectAuto.mockResolvedValue(languages[0])
+      ]
+      const uncalledMocks = [
+        jest.spyOn(poeditorHelper, 'filterLanguages')
+      ]
 
-      process.nextTick(() => {
-        stdinMock.send('\r')
-      })
       const output = await poeditorHelper.selectLanguage(poe)
 
       expect(output).toEqual(languages[0])
-      expect(excludeSpy.mock.calls.length).toEqual(0)
-      excludeSpy.mockRestore()
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled(uncalledMocks, 0)
     })
 
     it('should call exclude when exclude list is defined', async () => {
       const poe = new POEditor('abc')
-      jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages)
-      const excludeSpy = jest.spyOn(poeditorHelper, 'filterLanguages').mockReturnValue(languages)
-
-      process.nextTick(() => {
-        stdinMock.send('\r')
-      })
+      const mocks = [
+        jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages),
+        mocked(prompt).selectAuto.mockResolvedValue(languages[0]),
+        jest.spyOn(poeditorHelper, 'filterLanguages').mockReturnValue(languages)
+      ]
       const output = await poeditorHelper.selectLanguage(poe, [])
 
       expect(output).toEqual(languages[0])
-      expect(excludeSpy.mock.calls.length).toEqual(1)
-      excludeSpy.mockRestore()
+      checkAllMocksCalled(mocks, 1)
     })
 
     it('should return nothing when no languages are available', async () => {
       const poe = new POEditor('abc')
-      jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue([])
-      const excludeSpy = jest.spyOn(poeditorHelper, 'filterLanguages')
+      const mocks = [
+        jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue([])
+      ]
+      const uncalledMocks = [
+        mocked(prompt).selectAuto.mockResolvedValue(languages[0]),
+        jest.spyOn(poeditorHelper, 'filterLanguages')
+      ]
 
-      process.nextTick(() => {
-        stdinMock.send('\r')
-      })
       const output = await poeditorHelper.selectLanguage(poe)
 
       expect(output).toEqual(undefined)
-      expect(excludeSpy.mock.calls.length).toEqual(0)
-      excludeSpy.mockRestore()
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled(uncalledMocks, 0)
     })
   })
 
