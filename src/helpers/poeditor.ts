@@ -1,7 +1,7 @@
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction, selectAuto } from '@helpers/prompt'
 
 /**
  * Forces the user to select a project
@@ -38,7 +38,7 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)
-  return selectX<Language>(choices, 'Select language')
+  return selectAuto<Language>('Select language', buildChoiceSourceFunction<Language>(choices))
 }
 
 /**
@@ -85,10 +85,10 @@ export const inputTerms = async (): Promise<TermBase[]> => {
 
   while (true) {
     const termText = await promptInput('Input term', '', validateTerm)
-    const context = await promptInput('Input context (optional)', '', validateTerm)
-    const comment = await promptInput('Input comment (optional)', '', validateTerm)
-    const reference = await promptInput('Input reference (optional)', '', validateTerm)
-    const plural = await promptInput('Input plural (optional)', '', validateTerm)
+    const context = await promptInput('Input context (optional)', '')
+    const comment = await promptInput('Input comment (optional)', '')
+    const reference = await promptInput('Input reference (optional)', '')
+    const plural = await promptInput('Input plural (optional)', '')
 
     const tags = await inputTags()
 
