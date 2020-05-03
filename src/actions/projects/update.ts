@@ -17,8 +17,8 @@ export const update = async () => {
   const completeProject = await poe.viewProject({ id: project.id })
 
   const name: string = await promptInput('Input new project name (optional)', completeProject.name)
-  const description: string = await promptInput('Input new project name (optional)', completeProject.name)
-  const referenceLanguage: string = await promptInput('Input new project name (optional)', completeProject.name)
+  const description: string = await promptInput('Input new project description (optional)', completeProject.description)
+  const referenceLanguage: string = await promptInput('Input new project reference language (optional)', completeProject.reference_language)
 
   const data = await poe.updateProject({ id: project.id, name, description, reference_language: referenceLanguage })
   log.info('Project successfully updated')
