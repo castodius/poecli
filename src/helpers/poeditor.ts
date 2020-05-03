@@ -1,5 +1,5 @@
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor, ExportFilter } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
 import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction, selectAuto } from '@helpers/prompt'
 
@@ -212,22 +212,5 @@ export const getCompactProjectName = (project: CompactProject) => {
  * @param language
  */
 export const getLanguageName = (language: Language) => {
-  return `${language.name} - ${language.code}`
-}
-
-const exportFilters = Object.values(ExportFilter)
-/**
- * Filter function for inquirer
- * @param _
- * Irrelevant
- * @param input
- * Input to filter
- */
-export const exportFiltersSource = async (_: string, input: string): Promise<string[]> => {
-  if (!input) {
-    return exportFilters
-  }
-  return exportFilters.filter((value: string) => {
-    return value.includes(input)
-  })
+  return `${language.code} - ${language.name}`
 }
