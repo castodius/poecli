@@ -6,9 +6,9 @@ import * as prompt from '@helpers/prompt'
 
 // tools
 import { POEditor } from '@lib/poeditor'
-import { CompactProject, Language, ProjectLanguage } from '@models/poeditor'
+import { CompactProject, Language, ProjectLanguage, TermBase } from '@models/poeditor'
 
-// models
+// tools
 import { checkAllMocksCalled } from '@test/tools'
 import { mocked } from 'ts-jest/utils'
 
@@ -150,6 +150,105 @@ describe('poeditor', () => {
         name: 'Finnish',
         code: 'fi'
       }])
+    })
+  })
+
+  describe('selectProjectLanguage', () => {
+    const languages: ProjectLanguage[] = [{
+      name: 'Swedish',
+      code: 'sv',
+      translations: 0,
+      percentage: 0,
+      updated: 'some date'
+    }]
+
+    it('should be possible to select project language', async () => {
+      const poe = new POEditor('abc')
+      const mocks = [
+        jest.spyOn(poe, 'getProjectLanguages').mockResolvedValue(languages),
+        mocked(prompt).selectX.mockResolvedValue(languages[0])
+      ]
+
+      const output = await poeditorHelper.selectProjectLanguage(poe, 123456)
+
+      expect(output).toEqual(languages[0])
+      checkAllMocksCalled(mocks, 1)
+    })
+
+    it('should be return nothing if no languages are available', async () => {
+      const poe = new POEditor('abc')
+      const mocks = [
+        jest.spyOn(poe, 'getProjectLanguages').mockResolvedValue([])
+      ]
+      const uncalledMocks = [
+        mocked(prompt).selectX.mockResolvedValue(languages[0])
+      ]
+
+      const output = await poeditorHelper.selectProjectLanguage(poe, 123456)
+
+      expect(output).toEqual(undefined)
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled(uncalledMocks, 0)
+    })
+  })
+
+  describe('inputTerms', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const setResponseSequence = (times: number, mock: any) => {
+      for (let i = 0; i < times; i++) {
+        mock.mockResolvedValueOnce('term')
+        mock.mockResolvedValueOnce('context')
+        mock.mockResolvedValueOnce('comment')
+        mock.mockResolvedValueOnce('reference')
+        mock.mockResolvedValueOnce('plural')
+      }
+    }
+
+    const checkOutput = (output: TermBase) => {
+      expect(output).toEqual({
+        term: 'term',
+        context: 'context',
+        comment: 'comment',
+        reference: 'reference',
+        plural: 'plural',
+        tags: ['tags!']
+      })
+    }
+    it('should be possible to input one term', async () => {
+      const promptMock = mocked(prompt).promptInput
+      setResponseSequence(1, promptMock)
+      const mocks = [
+        jest.spyOn(poeditorHelper, 'inputTags').mockResolvedValue(['tags!']),
+        mocked(prompt).getConfirmation.mockResolvedValue(false)
+      ]
+
+      const output = await poeditorHelper.inputTerms()
+
+      expect(output).toHaveLength(1)
+      checkOutput(output[0])
+      checkAllMocksCalled(mocks, 1)
+      checkAllMocksCalled([promptMock], 5)
+    })
+
+    it('should be possible to input multiple terms', async () => {
+      const promptMock = mocked(prompt).promptInput
+      setResponseSequence(3, promptMock)
+      const mocks = [
+        jest.spyOn(poeditorHelper, 'inputTags').mockResolvedValue(['tags!']),
+        mocked(prompt).getConfirmation
+          .mockResolvedValueOnce(true)
+          .mockResolvedValueOnce(true)
+          .mockResolvedValueOnce(false)
+      ]
+
+      const output = await poeditorHelper.inputTerms()
+
+      expect(output).toHaveLength(3)
+      output.forEach((value: TermBase) => {
+        checkOutput(value)
+      })
+      checkAllMocksCalled(mocks, 3)
+      checkAllMocksCalled([promptMock], 15)
     })
   })
 })

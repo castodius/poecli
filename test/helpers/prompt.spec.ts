@@ -22,7 +22,7 @@ describe('prompt', () => {
       expect(output).toEqual(true)
     })
 
-    it('should return true if user typed n', async () => {
+    it('should return false if user typed n', async () => {
       process.nextTick(() => {
         stdinMock.send('n')
         stdinMock.end()
