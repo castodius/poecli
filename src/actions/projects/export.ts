@@ -1,6 +1,6 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage, inputTags, exportFiltersSource } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
 import { FileType, ExportFilter } from '@models/poeditor'
 import { getConfirmation, selectCheckboxPlus, selectAuto, buildStringSourceFunction } from '@helpers/prompt'
 
@@ -23,7 +23,7 @@ export const exportProject = async (): Promise<void> => {
   }
 
   const type: string = await selectAuto('Select output format', buildStringSourceFunction(Object.values(FileType)))
-  const filters: string[] = await selectCheckboxPlus<string>('Select filters (optional)', exportFiltersSource)
+  const filters: string[] = await selectCheckboxPlus<string>('Select filters (optional)', buildStringSourceFunction(Object.values(ExportFilter)))
 
   const tags: string[] = await inputTags()
 
