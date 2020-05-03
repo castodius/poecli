@@ -23,7 +23,7 @@ export const exportProject = async (): Promise<void> => {
   }
 
   const type: string = await selectAuto('Select output format', buildStringSourceFunction(Object.values(FileType)))
-  const filters: string[] = await selectCheckboxPlus<string>('Select filters (optional', exportFiltersSource)
+  const filters: string[] = await selectCheckboxPlus<string>('Select filters (optional)', exportFiltersSource)
 
   const tags: string[] = await inputTags()
 
