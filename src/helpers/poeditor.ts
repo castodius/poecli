@@ -117,7 +117,7 @@ export const inputTerms = async (): Promise<TermBase[]> => {
  * String which should be validated.
  */
 export const validateTerm = (value: string) => {
-  if (!value && !value.trim()) {
+  if (!value || !value.trim()) {
     return 'Please input a term such as "PROJECT_NAME"'
   }
 

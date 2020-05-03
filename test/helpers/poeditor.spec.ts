@@ -251,4 +251,92 @@ describe('poeditor', () => {
       checkAllMocksCalled([promptMock], 15)
     })
   })
+
+  describe('validateTerm', () => {
+    it('should accept defined values', () => {
+      ['abc', 'MY_TERM', 'MY TERM'].forEach((value: string) => {
+        const output = poeditorHelper.validateTerm(value)
+
+        expect(output).toEqual(true)
+      })
+    })
+
+    it('should reject empty value', () => {
+      const output = poeditorHelper.validateTerm('')
+
+      expect(typeof output).toEqual('string')
+    })
+
+    it('should reject just spaces', () => {
+      const output = poeditorHelper.validateTerm('     ')
+
+      expect(typeof output).toEqual('string')
+    })
+  })
+
+  describe('inputTags', () => {
+    it('should be possible to input one tag', async () => {
+      const mocks = [
+        mocked(prompt).promptInput
+          .mockResolvedValueOnce('tag')
+          .mockResolvedValueOnce('')
+      ]
+
+      const output = await poeditorHelper.inputTags()
+
+      expect(output).toEqual(['tag'])
+      checkAllMocksCalled(mocks, 2)
+    })
+
+    it('should be possible to input several tags', async () => {
+      const mocks = [
+        mocked(prompt).promptInput
+          .mockResolvedValueOnce('tag')
+          .mockResolvedValueOnce('tag')
+          .mockResolvedValueOnce('tag')
+          .mockResolvedValueOnce('')
+      ]
+
+      const output = await poeditorHelper.inputTags()
+
+      expect(output).toEqual(['tag', 'tag', 'tag'])
+      checkAllMocksCalled(mocks, 4)
+    })
+
+    it('should be possible to input no tags', async () => {
+      const mocks = [
+        mocked(prompt).promptInput
+          .mockResolvedValueOnce('')
+      ]
+
+      const output = await poeditorHelper.inputTags()
+
+      expect(output).toEqual([])
+      checkAllMocksCalled(mocks, 1)
+    })
+  })
+
+  describe('validateTag', () => {
+    it('should accept good input', () => {
+      ['abc', 'payments', 'my-tag'].forEach((tag: string) => {
+        const output = poeditorHelper.validateTag(tag)
+
+        expect(output).toEqual(true)
+      })
+    })
+
+    it('should accept empty input', () => {
+      const output = poeditorHelper.validateTag('')
+
+      expect(output).toEqual(true)
+    })
+
+    it('should reject bad input', () => {
+      ['two words', 'a lot of words', 'ohno,,,'].forEach((tag: string) => {
+        const output = poeditorHelper.validateTag(tag)
+
+        expect(typeof output).toEqual('string')
+      })
+    })
+  })
 })
