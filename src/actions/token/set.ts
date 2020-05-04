@@ -33,7 +33,6 @@ export const getToken = async (): Promise<string> => {
  */
 export const verifyToken = async (token: string): Promise<boolean> => {
   const poe = new POEditor(token)
-
   try {
     await poe.listProjects()
     return true
