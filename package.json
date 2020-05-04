@@ -7,7 +7,7 @@
     "build": "npx webpack",
     "lint": "./node_modules/.bin/eslint src/**/*.ts",
     "lint:fix": "./node_modules/.bin/eslint --fix src/**/*.ts",
-    "test": "./node_modules/.bin/jest"
+    "test": "./node_modules/.bin/jest --runInBand"
   },
   "repository": {
     "type": "git",
