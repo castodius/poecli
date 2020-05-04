@@ -1,3 +1,5 @@
+// istanbul ignore file
+
 import { getToken } from '@helpers/config'
 import * as log from '@lib/log'
 
