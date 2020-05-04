@@ -4,7 +4,8 @@ module.exports = {
     '@lib/(.*)$': '<rootDir>/src/lib/$1',
     '@test/(.*)$': '<rootDir>/test/$1',
     '@helpers/(.*)$': '<rootDir>/src/helpers/$1',
-    '@models/(.*)$': '<rootDir>/src/models/$1'
+    '@models/(.*)$': '<rootDir>/src/models/$1',
+    '@actions/(.*)$': '<rootDir>/src/actions/$1'
   },
   testPathIgnorePatterns: ['/node_modules/'],
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
