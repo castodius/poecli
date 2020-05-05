@@ -1,4 +1,4 @@
-# POECli - POEditor CLI
+# poecli - POEditor CLI
 
 **THIS IS STILL WORK IN PROGRESS, MORE UPDATES TO COME**
 
@@ -6,10 +6,16 @@ An interactive CLI for [POEditor](https://poeditor.com), a software localization
 
 ## Installation
 
-POECLI should be installed globally. After installation run **poecli** in a terminal.
+POECLI should be installed globally.
 
 ```
 npm i -g poecli
+```
+
+When uninstalling you will find the local storage for poecli at:
+
+```
+.poecli
 ```
 
 ## Configuration
