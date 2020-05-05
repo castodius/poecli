@@ -1,9 +1,10 @@
+/* eslint-disable new-cap */
 const nodeExternals = require('webpack-node-externals')
 const tsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-const copyPlugin = require('copy-webpack-plugin');
+const copyPlugin = require('copy-webpack-plugin')
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   target: 'node',
@@ -22,7 +23,7 @@ module.exports = {
           happyPackMode: true
         }
       }
-    ],
+    ]
   },
   externals: [nodeExternals()],
   resolve: {
@@ -40,9 +41,9 @@ module.exports = {
       {
         from: 'readme.md'
       }
-    ]),
+    ])
   ],
   node: {
     __dirname: false
-  },
-};
+  }
+}
