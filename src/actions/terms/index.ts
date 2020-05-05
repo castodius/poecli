@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer'
 
 import { list } from './list'
-import { add } from './add'
+import { entry as addEntry } from './add/index'
 import { update } from './update'
 import { deleteTerms } from './delete'
 import { comment } from './comment'
@@ -25,7 +25,7 @@ export const entry = async (): Promise<void> => {
       message: 'Select project action:',
       choices: [
         { name: 'List available terms for a project', value: Action.LIST },
-        { name: 'Add terms to project', value: Action.ADD },
+        { name: 'Add term(s) to project', value: Action.ADD },
         { name: 'Update terms', value: Action.UPDATE },
         { name: 'Delete terms', value: Action.DELETE },
         { name: 'Add comments to terms', value: Action.COMMENT }
@@ -39,7 +39,7 @@ export const entry = async (): Promise<void> => {
       break
     }
     case Action.ADD: {
-      await add()
+      await addEntry()
       break
     }
     case Action.UPDATE: {
