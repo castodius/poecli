@@ -66,14 +66,14 @@ export const filterLanguages = (languages: Language[], filters: ProjectLanguage[
  * @param id
  * Project id. For example 123456
  */
-export const selectProjectLanguage = async (poe: POEditor, id: number): Promise<ProjectLanguage | undefined> => {
+export const selectProjectLanguage = async (poe: POEditor, id: number, message: string = 'Select language'): Promise<ProjectLanguage | undefined> => {
   const languages = await poe.getProjectLanguages({ id })
   if (!languages.length) {
     return
   }
 
   const choices = mapToChoices<ProjectLanguage>(languages, getLanguageName)
-  return selectX<ProjectLanguage>(choices, 'Select language')
+  return selectX<ProjectLanguage>(choices, message)
 }
 
 /**
