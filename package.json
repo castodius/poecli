@@ -14,9 +14,10 @@
     "url": "git+https://github.com/castodius/poecli.git"
   },
   "keywords": [
-    "poecli",
+    "poeditor",
     "cli",
-    "interactive"
+    "interactive",
+    "poecli"
   ],
   "author": "Urban Pettersson",
   "license": "MIT",
