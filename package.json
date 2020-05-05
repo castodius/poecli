@@ -2,7 +2,10 @@
   "name": "poecli",
   "version": "0.0.3",
   "description": "An interactive CLI for POEditor",
-  "main": "index.js",
+  "main": "./bundle.js",
+  "bin": {
+    "poecli": "./bundle.js"
+  },
   "scripts": {
     "build": "npx webpack",
     "lint": "./node_modules/.bin/eslint src/**/*.ts test/**/*.ts",
