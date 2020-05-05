@@ -1,13 +1,14 @@
 {
   "name": "poecli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An interactive CLI for POEditor",
   "main": "index.js",
   "scripts": {
     "build": "npx webpack",
-    "lint": "./node_modules/.bin/eslint src/**/*.ts",
-    "lint:fix": "./node_modules/.bin/eslint --fix src/**/*.ts",
-    "test": "./node_modules/.bin/jest --runInBand"
+    "lint": "./node_modules/.bin/eslint src/**/*.ts test/**/*.ts",
+    "lint:fix": "./node_modules/.bin/eslint --fix src/**/*.ts test/**/*.ts",
+    "test": "./node_modules/.bin/jest --runInBand",
+    "release": "standard-version --no-verify"
   },
   "repository": {
     "type": "git",
@@ -51,18 +52,26 @@
     "husky": "^4.2.5",
     "jest": "^25.5.1",
     "mock-stdin": "^1.0.0",
+    "standard-version": "^7.1.0",
     "ts-jest": "^25.4.0",
     "ts-loader": "^6.2.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "yarn": "^1.22.4"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
       "pre-push": "npm test"
+    }
+  },
+  "standard-version": {
+    "scripts": {
+      "prerelease": "yarn build && yarn test",
+      "posttag": "echo 'Now run cd dist/ && yarn publish && cd ../ && git push --follow-tags origin master'"
     }
   }
 }
