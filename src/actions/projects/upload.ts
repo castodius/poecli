@@ -2,12 +2,13 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
-import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject } from '@models/poeditor'
+import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject, CompactProject } from '@models/poeditor'
 import { readdirSync } from 'fs'
 import { getConfirmation, selectAuto, buildStringSourceFunction, selectCheckboxPlus, Choice, buildChoiceSourceFunction } from '@helpers/prompt'
 import { inputTags } from '@helpers/terms'
 
 type POBooleanUndefined = POBoolean | undefined
+const allowedFileFormats = Object.values(FileType)
 
 /**
  * Uploads a file to POEditor which will add terms to a project
@@ -21,23 +22,18 @@ export const upload = async (): Promise<void> => {
     return
   }
 
-  const unfilteredFiles = readdirSync(process.cwd())
+  await uploadProjectFile(poe, project)
+}
 
-  const allowedFileFormats = Object.values(FileType)
-  const files = unfilteredFiles.filter((filename: string) => {
-    return allowedFileFormats.some((fileFormat: string) => {
-      return filename.endsWith(`.${fileFormat}`)
-    })
-  })
-
-  if (!files.length) {
-    log.info('The directory you are currently located in does contain any valid files. Here is the list of allowed formats:')
+export const uploadProjectFile = async (poe: POEditor, project: CompactProject): Promise<void> => {
+  const file: string | undefined = await selectFile()
+  if (!file) {
+    log.info('The directory you are currently located in does not contain any valid files. Here is the list of allowed formats:')
     log.info(JSON.stringify(allowedFileFormats))
     return
   }
 
   const updating: UpdateType = (await selectAuto('Select update type', buildStringSourceFunction(Object.values(UpdateType)))) as UpdateType
-  const file: string = await selectAuto('Select a file', buildStringSourceFunction(files))
 
   const language: string | undefined = await getLanguage(updating, project.id, poe)
   const overwrite: POBooleanUndefined = await getOverwrite(updating)
@@ -45,7 +41,6 @@ export const upload = async (): Promise<void> => {
   const readFromSource: POBooleanUndefined = await getReadFromSource(file)
   const fuzzyTrigger: POBoolean = await getFuzzyTrigger()
   const tags: UpdateTagObject | undefined = await getTags(updating)
-
   const data = await poe.uploadProject({
     id: project.id,
     updating,
@@ -60,6 +55,22 @@ export const upload = async (): Promise<void> => {
 
   log.info('Project file successfully uploaded and parsed')
   log.info(JSON.stringify(data))
+}
+
+export const selectFile = async (): Promise<string | undefined> => {
+  const unfilteredFiles = readdirSync(process.cwd())
+
+  const files = unfilteredFiles.filter((filename: string) => {
+    return allowedFileFormats.some((fileFormat: string) => {
+      return filename.endsWith(`.${fileFormat}`)
+    })
+  })
+
+  if (!files.length) {
+    return
+  }
+
+  return selectAuto('Select a file', buildStringSourceFunction(files))
 }
 
 /**
