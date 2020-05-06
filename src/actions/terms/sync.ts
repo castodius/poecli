@@ -1,7 +1,8 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, inputTerms } from '@helpers/poeditor'
+import { selectProject } from '@helpers/poeditor'
 import { TermBase } from '@models/poeditor'
+import { inputTerms } from '@helpers/terms'
 
 /**
  * Manually syncs in terms to a project. DANGEROUS. Should not be used for existing projects.
