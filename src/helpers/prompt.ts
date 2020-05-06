@@ -80,7 +80,7 @@ export const selectAuto = async<T>(message: string, sourceFunction: (_: string, 
  * Source function used when getting options
  */
 export const selectCheckboxPlus = async<T>(message: string, sourceFunction: (_: string, input: string) => Promise<Choice<T>[] | T[]>): Promise<T[]> => {
-  return selectAdvanced<T, T[]>('checkbox-plus', message, sourceFunction)
+  return selectAdvanced<T, T[]>('checkbox-plus', message + ' (type to search)', sourceFunction)
 }
 
 /**
@@ -98,6 +98,7 @@ export const selectAdvanced = async<T, U>(type: string, message: string, sourceF
       name: 'choice',
       type,
       message,
+      searchable: true,
       source: sourceFunction
     }
   ])
@@ -135,7 +136,7 @@ export const buildStringSourceFunction = (choices: string[]): (_: string, input:
       return choices
     }
     return choices.filter((choice: string): boolean => {
-      return choice.includes(input)
+      return choice.toLowerCase().includes(input)
     })
   }
 }
@@ -151,7 +152,7 @@ export const buildChoiceSourceFunction = <T>(choices: Choice<T>[]): (_: string, 
       return choices
     }
     return choices.filter((choice: Choice<T>): boolean => {
-      return choice.name.includes(input)
+      return choice.name.toLowerCase().includes(input)
     })
   }
 }
