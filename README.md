@@ -31,7 +31,7 @@ Now that the CLI is configured you can check out the available options by runnin
 - Terms
 - Contributors
 
-Each option corresponds to the available API endpoints describes in [POEditor API Documentation](https://poeditor.com/docs/api).
+Each option corresponds to the available API endpoints described in [POEditor API Documentation](https://poeditor.com/docs/api).
 
 ## Issues and feature requests
 
