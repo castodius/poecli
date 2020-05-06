@@ -1,6 +1,5 @@
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
-import { BooleanMap } from '@models/common'
 import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
 
 /**
@@ -18,45 +17,6 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject | und
   const choices = mapToChoices<CompactProject>(projects, getCompactProjectName)
 
   return selectX<CompactProject>(choices, 'Select project')
-}
-
-/**
- * Forces the user to select languages to add from the list of all available languages
- * @param poe
- * POEditor instance
- * @param exclude
- * List of languages to exclude. Optional.
- */
-export const selectNewLanguages = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language[] | undefined> => {
-  let languages = await poe.getAvailableLanguages()
-  if (exclude) {
-    languages = filterLanguages(languages, exclude)
-  }
-
-  if (!languages.length) {
-    return
-  }
-
-  const choices = mapToChoices<Language>(languages, getLanguageName)
-  return selectCheckboxPlus<Language>('Select language(s) to add to your project', buildChoiceSourceFunction<Language>(choices))
-}
-
-/**
- * Removes list of languages to exclude from another list
- * @param languages
- * Languages from which to filter
- * @param filters
- * Filters
- */
-export const filterLanguages = (languages: Language[], filters: ProjectLanguage[]): Language[] => {
-  const filterMap: BooleanMap = filters.reduce((acc: BooleanMap, language: ProjectLanguage) => {
-    acc[language.code] = true
-    return acc
-  }, {})
-
-  return languages.filter((language: Language) => {
-    return !filterMap[language.code]
-  })
 }
 
 /**
