@@ -70,15 +70,15 @@ describe('poeditor', () => {
       const poe = new POEditor('abc')
       const mocks = [
         jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages),
-        mocked(prompt).selectAuto.mockResolvedValue(languages[0])
+        mocked(prompt).selectCheckboxPlus.mockResolvedValue(languages)
       ]
       const uncalledMocks = [
         jest.spyOn(poeditorHelper, 'filterLanguages')
       ]
 
-      const output = await poeditorHelper.selectLanguage(poe)
+      const output = await poeditorHelper.selectNewLanguages(poe)
 
-      expect(output).toEqual(languages[0])
+      expect(output).toEqual(languages)
       checkAllMocksCalled(mocks, 1)
       checkAllMocksCalled(uncalledMocks, 0)
     })
@@ -87,12 +87,12 @@ describe('poeditor', () => {
       const poe = new POEditor('abc')
       const mocks = [
         jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue(languages),
-        mocked(prompt).selectAuto.mockResolvedValue(languages[0]),
+        mocked(prompt).selectCheckboxPlus.mockResolvedValue(languages),
         jest.spyOn(poeditorHelper, 'filterLanguages').mockReturnValue(languages)
       ]
-      const output = await poeditorHelper.selectLanguage(poe, [])
+      const output = await poeditorHelper.selectNewLanguages(poe, [])
 
-      expect(output).toEqual(languages[0])
+      expect(output).toEqual(languages)
       checkAllMocksCalled(mocks, 1)
     })
 
@@ -102,11 +102,11 @@ describe('poeditor', () => {
         jest.spyOn(poe, 'getAvailableLanguages').mockResolvedValue([])
       ]
       const uncalledMocks = [
-        mocked(prompt).selectAuto.mockResolvedValue(languages[0]),
+        mocked(prompt).selectCheckboxPlus.mockResolvedValue(languages),
         jest.spyOn(poeditorHelper, 'filterLanguages')
       ]
 
-      const output = await poeditorHelper.selectLanguage(poe)
+      const output = await poeditorHelper.selectNewLanguages(poe)
 
       expect(output).toEqual(undefined)
       checkAllMocksCalled(mocks, 1)

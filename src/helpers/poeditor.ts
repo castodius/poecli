@@ -1,7 +1,7 @@
 import { POEditor } from '@lib/poeditor'
 import { CompactProject, Language, ProjectLanguage, TermBase, Term, Contributor } from '@models/poeditor'
 import { BooleanMap } from '@models/common'
-import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction, selectAuto } from '@helpers/prompt'
+import { getConfirmation, mapToChoices, selectX, selectCheckboxPlus, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
 
 /**
  * Forces the user to select a project
@@ -21,13 +21,13 @@ export const selectProject = async (poe: POEditor): Promise<CompactProject | und
 }
 
 /**
- * Forces the user to select a language from the list of all available languages
+ * Forces the user to select languages to add from the list of all available languages
  * @param poe
  * POEditor instance
  * @param exclude
  * List of languages to exclude. Optional.
  */
-export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language | undefined> => {
+export const selectNewLanguages = async (poe: POEditor, exclude?: ProjectLanguage[]): Promise<Language[] | undefined> => {
   let languages = await poe.getAvailableLanguages()
   if (exclude) {
     languages = filterLanguages(languages, exclude)
@@ -38,7 +38,7 @@ export const selectLanguage = async (poe: POEditor, exclude?: ProjectLanguage[])
   }
 
   const choices = mapToChoices<Language>(languages, getLanguageName)
-  return selectAuto<Language>('Select language', buildChoiceSourceFunction<Language>(choices))
+  return selectCheckboxPlus<Language>('Select language(s) to add to your project', buildChoiceSourceFunction<Language>(choices))
 }
 
 /**
