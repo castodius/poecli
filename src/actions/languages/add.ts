@@ -1,7 +1,8 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectLanguage, selectProject } from '@helpers/poeditor'
+import { selectProject } from '@helpers/poeditor'
+import { addLanguagesToProject } from '@helpers/languages'
 
 /**
  * Adds a language to a project
@@ -15,13 +16,6 @@ export const add = async (): Promise<void> => {
     return
   }
   const exclude = await poe.getProjectLanguages({ id: project.id })
-  const language = await selectLanguage(poe, exclude)
-  if (!language) {
-    log.info('This project has no languages')
-    return
-  }
 
-  await poe.addLanguage({ id: project.id, language: language.code })
-
-  log.info(`Successfully added ${language.name} to ${project.name}`)
+  await addLanguagesToProject(poe, project, exclude)
 }
