@@ -1,8 +1,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, multiSelectTerms } from '@helpers/poeditor'
+import { selectProject } from '@helpers/poeditor'
 import { Term, AddTermComment } from '@models/poeditor'
 import { promptInput } from '@helpers/prompt'
+import { multiSelectTerms } from '@helpers/terms'
 
 /**
  * Adds comments to terms

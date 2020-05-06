@@ -1,8 +1,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import { FileType, ExportFilter } from '@models/poeditor'
 import { getConfirmation, selectCheckboxPlus, selectAuto, buildStringSourceFunction } from '@helpers/prompt'
+import { inputTags } from '@helpers/terms'
 
 /**
  * Exports project data

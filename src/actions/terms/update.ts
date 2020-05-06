@@ -1,8 +1,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, validateTerm, inputTags, getTermName } from '@helpers/poeditor'
+import { selectProject, getTermName } from '@helpers/poeditor'
 import { Term, UpdateTerm } from '@models/poeditor'
 import { getConfirmation, mapToChoices, selectAuto, promptInput, buildChoiceSourceFunction } from '@helpers/prompt'
+import { validateTerm, inputTags } from '@helpers/terms'
 
 /**
  * Updates terms

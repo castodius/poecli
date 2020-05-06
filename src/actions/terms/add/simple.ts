@@ -1,8 +1,9 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, validateTerm, selectProjectLanguage } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import { TermBase, ProjectLanguage } from '@models/poeditor'
 import { promptInput } from '@helpers/prompt'
+import { validateTerm } from '@helpers/terms'
 
 /**
  * Adds a single term with translation to a project

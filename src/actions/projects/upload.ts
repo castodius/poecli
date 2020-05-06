@@ -1,10 +1,11 @@
 
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
-import { selectProject, selectProjectLanguage, inputTags } from '@helpers/poeditor'
+import { selectProject, selectProjectLanguage } from '@helpers/poeditor'
 import { FileType, UpdateType, POBoolean, UpdateTag, UpdateTagObject } from '@models/poeditor'
 import { readdirSync } from 'fs'
 import { getConfirmation, selectAuto, buildStringSourceFunction, selectCheckboxPlus, Choice, buildChoiceSourceFunction } from '@helpers/prompt'
+import { inputTags } from '@helpers/terms'
 
 type POBooleanUndefined = POBoolean | undefined
 
