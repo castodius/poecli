@@ -1,8 +1,7 @@
 import { POEditor } from '@lib/poeditor'
 import * as log from '@lib/log'
 import { selectProject } from '@helpers/poeditor'
-import { TermBase } from '@models/poeditor'
-import { inputTerms } from '@helpers/terms'
+import { addTerms } from '@helpers/terms'
 
 /**
  * Adds terms to a project
@@ -16,9 +15,7 @@ export const add = async (): Promise<void> => {
     return
   }
 
-  const terms: TermBase[] = await inputTerms()
-
-  const data = await poe.addTerms({ id: project.id, terms })
+  const data = await addTerms(poe, project)
   log.info('Terms added')
   log.info(JSON.stringify(data))
 }
