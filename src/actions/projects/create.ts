@@ -5,7 +5,7 @@ import { promptInput } from '@helpers/prompt'
 /**
  * Adds a new project
  */
-export const add = async () => {
+export const create = async () => {
   const poe = new POEditor()
 
   const name: string = await promptInput('Input project name', '', validateName)

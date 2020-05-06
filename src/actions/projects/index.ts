@@ -2,7 +2,7 @@ import * as inquirer from 'inquirer'
 
 import { list } from './list'
 import { view } from './view'
-import { add } from './add'
+import { create } from './create'
 import { update } from './update'
 import { deleteProject } from './delete'
 import { upload } from './upload'
@@ -12,7 +12,7 @@ import { exportProject } from './export'
 enum Action {
   LIST,
   VIEW,
-  ADD,
+  CREATE,
   UPDATE,
   DELETE,
   UPLOAD,
@@ -32,7 +32,7 @@ export const entry = async (): Promise<void> => {
       choices: [
         { name: 'List', value: Action.LIST },
         { name: 'View', value: Action.VIEW },
-        { name: 'Add', value: Action.ADD },
+        { name: 'Create', value: Action.CREATE },
         { name: 'Update', value: Action.UPDATE },
         { name: 'Delete', value: Action.DELETE },
         { name: 'Upload', value: Action.UPLOAD },
@@ -51,8 +51,8 @@ export const entry = async (): Promise<void> => {
       await view()
       break
     }
-    case Action.ADD: {
-      await add()
+    case Action.CREATE: {
+      await create()
       break
     }
     case Action.UPDATE: {
