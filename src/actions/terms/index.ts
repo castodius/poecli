@@ -5,10 +5,12 @@ import { entry as addEntry } from './add/index'
 import { update } from './update'
 import { deleteTerms } from './delete'
 import { comment } from './comment'
+import { sync } from './sync'
 
 enum Action {
   LIST,
   ADD,
+  SYNC,
   UPDATE,
   DELETE,
   COMMENT
@@ -26,6 +28,7 @@ export const entry = async (): Promise<void> => {
       choices: [
         { name: 'List available terms for a project', value: Action.LIST },
         { name: 'Add term(s) to project', value: Action.ADD },
+        { name: 'Sync terms to project', value: Action.SYNC },
         { name: 'Update terms', value: Action.UPDATE },
         { name: 'Delete terms', value: Action.DELETE },
         { name: 'Add comments to terms', value: Action.COMMENT }
@@ -40,6 +43,10 @@ export const entry = async (): Promise<void> => {
     }
     case Action.ADD: {
       await addEntry()
+      break
+    }
+    case Action.SYNC: {
+      await sync()
       break
     }
     case Action.UPDATE: {
