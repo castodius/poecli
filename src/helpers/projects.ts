@@ -18,13 +18,14 @@ export const uploadProjectFile = async (poe: POEditor, project: CompactProject, 
     return
   }
 
-  const updating: UpdateType = (await selectAuto('Select update type', buildStringSourceFunction(Object.values(UpdateType)))) as UpdateType
+  const updating: UpdateType = await selectUpdateType(poe, project.id)
+  const language = await getLanguage(updating, project.id, poe)
 
   const data = await poe.uploadProject({
     id: project.id,
     updating,
     file: `${process.cwd()}/${file}`,
-    language: await getLanguage(updating, project.id, poe),
+    language,
     overwrite: existing ? await getOverwrite(updating) : 0,
     sync_terms: existing ? await getSyncTerms(updating) : 0,
     read_from_source: await getReadFromSource(file),
@@ -34,6 +35,15 @@ export const uploadProjectFile = async (poe: POEditor, project: CompactProject, 
 
   log.info('Project file successfully uploaded and parsed')
   log.info(JSON.stringify(data))
+}
+
+export const selectUpdateType = async (poe: POEditor, id: number): Promise<UpdateType> => {
+  const languages = await poe.getProjectLanguages({ id })
+  if (!languages.length) {
+    return UpdateType.TERMS
+  }
+
+  return (await selectAuto('Select update type', buildStringSourceFunction([UpdateType.TERMS_TRANSLATIONS, UpdateType.TRANSLATIONS]))) as UpdateType
 }
 
 export const selectFile = async (): Promise<string | undefined> => {
