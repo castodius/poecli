@@ -40,7 +40,7 @@ export const handleTerms = async (poe: POEditor, project: Project) => {
     log.info('Terms added')
     log.info(JSON.stringify(data))
   } else {
-    await uploadProjectFile(poe, project)
+    await uploadProjectFile(poe, project, false)
   }
 }
 

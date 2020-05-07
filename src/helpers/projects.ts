@@ -10,7 +10,7 @@ import { inputTags } from './terms'
 type POBooleanUndefined = POBoolean | undefined
 const allowedFileFormats = Object.values(FileType)
 
-export const uploadProjectFile = async (poe: POEditor, project: CompactProject): Promise<void> => {
+export const uploadProjectFile = async (poe: POEditor, project: CompactProject, existing: boolean): Promise<void> => {
   const file: string | undefined = await selectFile()
   if (!file) {
     log.info('The directory you are currently located in does not contain any valid files. Here is the list of allowed formats:')
@@ -20,22 +20,16 @@ export const uploadProjectFile = async (poe: POEditor, project: CompactProject):
 
   const updating: UpdateType = (await selectAuto('Select update type', buildStringSourceFunction(Object.values(UpdateType)))) as UpdateType
 
-  const language: string | undefined = await getLanguage(updating, project.id, poe)
-  const overwrite: POBooleanUndefined = await getOverwrite(updating)
-  const syncTerms: POBooleanUndefined = await getSyncTerms(updating)
-  const readFromSource: POBooleanUndefined = await getReadFromSource(file)
-  const fuzzyTrigger: POBoolean = await getFuzzyTrigger()
-  const tags: UpdateTagObject | undefined = await getTags(updating)
   const data = await poe.uploadProject({
     id: project.id,
     updating,
     file: `${process.cwd()}/${file}`,
-    language,
-    overwrite,
-    sync_terms: syncTerms,
-    read_from_source: readFromSource,
-    fuzzy_trigger: fuzzyTrigger,
-    tags
+    language: await getLanguage(updating, project.id, poe),
+    overwrite: existing ? await getOverwrite(updating) : 0,
+    sync_terms: existing ? await getSyncTerms(updating) : 0,
+    read_from_source: await getReadFromSource(file),
+    fuzzy_trigger: existing ? await getFuzzyTrigger() : 0,
+    tags: await getTags(updating)
   })
 
   log.info('Project file successfully uploaded and parsed')

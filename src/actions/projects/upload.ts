@@ -16,5 +16,5 @@ export const upload = async (): Promise<void> => {
     return
   }
 
-  await uploadProjectFile(poe, project)
+  await uploadProjectFile(poe, project, true)
 }
