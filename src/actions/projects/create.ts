@@ -4,7 +4,7 @@ import { promptInput, getConfirmation, selectAuto, buildStringSourceFunction } f
 import { Project } from '@models/poeditor'
 import { addLanguagesToProject, setReferenceLanguage } from '@helpers/languages'
 import { addTerms } from '@helpers/terms'
-import { uploadProjectFile } from './upload'
+import { uploadProjectFile } from '@helpers/projects'
 
 /**
  * Creates a new project
